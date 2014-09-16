@@ -84,4 +84,4 @@ def generate2(N, p, q, M):
 
 #print str(generate(9, 3, 3, 25))
 
-generate2(2, 2, 1, 4).display()
+generate(2, 2, 1, 4).display()

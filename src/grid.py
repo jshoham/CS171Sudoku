@@ -39,42 +39,36 @@ class Grid(object):
             print line
 
     def displayCell(self, x, y):
-        print 'Contents of cell at (', x, ',', y, '):', self.grid[x][y]
+        cell = self.grid[x][y]
+        print 'Contents of cell at (', x, ',', y, '): token:', cell.token, 'possible tokens:', cell.possible_tokens
 
     def randomFill(self):
         for i in range(self.N):
             for j in range(self.N):
                 cell = self.grid[i][j]
-                cell.clear()
-                cell.add(randint(0, self.N))
+                cell.token = randint(0, self.N)
 
     def clear(self):
         for i in range(self.N):
             for j in range(self.N):
                 cell = self.grid[i][j]
-                cell.clear()
-                cell.update(range(1,self.N+1))
+                cell.token = 0
+                cell.possible_tokens.clear()
+                cell.possible_tokens.update(range(1,self.N+1))
 
     # sets the cell at (x, y) to value, then runs a constraint propagation
     def choose(self, x, y, value):
-        possible_values = self.grid[x][y]
-        if value in possible_values:
+        cell = self.grid[x][y]
+        if value in cell.possible_tokens:
             self.propagateConstraints(x, y, value)
-            possible_values.clear()
-            possible_values.add(value)
+            cell.token = value
             return True
         else:
             return False
 
     # sets the cell at (x, y) to value, without running a constraint propagation
     def assign(self, x, y, value):
-        possible_values = self.grid[x][y]
-        if value in possible_values:
-            possible_values.clear()
-            possible_values.add(value)
-            return True
-        else:
-            return False
+        self.grid[x][y].token = value
 
     def propagateConstraints(self, x, y, value):
         # remove value as a candidate from all peers in the same box
@@ -82,15 +76,15 @@ class Grid(object):
         upperleft_y = y - y%self.q
         for row in range(upperleft_x, upperleft_x+self.p):
             for col in range(upperleft_y, upperleft_y+self.q):
-                self.grid[row][col].discard(value)
+                self.grid[row][col].possible_tokens.discard(value)
 
         # remove value as a candidate from all peers in the same row and column
         for cell in range(self.N):
-            self.grid[x][cell].discard(value)
-            self.grid[cell][y].discard(value)
+            self.grid[x][cell].possible_tokens.discard(value)
+            self.grid[cell][y].possible_tokens.discard(value)
 
         # the cell at (x, y) will be cleared during the propagation process so re-add it
-        self.grid[x][y].add(value)
+        self.grid[x][y].possible_tokens.add(value)
 
 
     # checks if placing value in the cell at (x, y) will violate a row/column/box constraint
@@ -117,19 +111,14 @@ class Grid(object):
 
 
     def cellFilled(self, x, y):
-        cell = self.grid[x][y]
-        return len(cell) == 1
+        return self.grid[x][y].token != 0
 
     def cellValue(self, x, y):
-        if self.cellFilled(x, y):
-            (cell_value,) = self.grid[x][y]
-            return cell_value
-        else:
-            return 0
+        return self.grid[x][y].token
 
 class Cell(object):
 
     def __init__(self, N):
-        self.token = None
+        self.token = 0
         self.possible_tokens = set(range(1, N+1))
 

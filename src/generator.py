@@ -2,51 +2,56 @@
 
 from grid import Grid
 from random import *
-
-inputFile = 'gen_input.txt'
-outputFile = 'gen_output.txt'
+import sys
 
 
-def readfile(inputFile):
-    f = open(inputFile, 'r')
+
+
+def read_file(input_filename):
+    f = None
+    try:
+        f = open(input_filename, 'r')
+    except:
+        print 'Failed to open input file.'
+        exit(-1)
+
     line = f.readline().split()
-    if len(line) == 4:
-        N, p, q, M = line
-    else:
-        print "input error"
+    param_list = []
+    try:
+        if len(line) == 4:
+            param_list = [int(x) for x in line]
+        else:
+            exit(-1)
+    except:
+        print 'Input file is not in the correct format.'
+        exit(-1)
+
+    f.close()
+    return param_list
+
+def verify_input(N, p, q, M):
+    verify = (N > 0) and \
+             (p > 0) and \
+             (q > 0) and \
+             (M >= 0) and \
+             (p*q == N) and \
+             (M <= N**N)
+
+    if not verify:
+        print 'Invalid parameters: N = p*q and M < N^2 must be true'
+        exit(-1)
 
 
-def verifyInput(N, p, q, M):
-    assert(N > 0)
-    assert(p > 0)
-    assert(q > 0)
-    assert(M > 0)
-    assert(p*q == N)
-    assert(M <= N**N)
+def write_file(board, outfile):
+    f = None
+    try:
+        f = open(outfile, 'w+')
+    except:
+        print 'Failed to open output file.'
+        exit(-1)
 
-
-
-# bug: if a cell's possible values is reduced to 1 by constraint propagation then the cell
-# is considered solved but it is not reflected in the 'filled' count. Thus when the board
-# becomes full it gets stuck in an infinite loop looking for nonexistent vacant cells
-def generate(N, p, q, M):
-    filled = 0
-    board = Grid(N, p, q, M)
-    while filled < M:
-        i = randint(0, N - 1)
-        j = randint(0, N - 1)
-        possible_values = board.grid[i][j]
-        if len(possible_values) == 0:
-            board.clear()
-            filled = 0
-            print 'restarting'
-        elif len(possible_values) > 1:
-            if board.choose(i, j, sample(possible_values, 1)[0]):
-                filled += 1
-                print 'new', filled
-                board.display()
-
-    return board
+    f.write(str(board))
+    f.close()
 
 
 # Generate a random puzzle by repeatedly picking a random vacant cell and assigning a
@@ -56,32 +61,44 @@ def generate(N, p, q, M):
 # (do not backtrack). Repeat until M cells have been filled. If you failed globally
 # before the random puzzle was generated successfully, then execute a random restart and
 # try again. Keep trying until success.
-def generate2(N, p, q, M):
+def generate(N, p, q, M):
     filled = 0
     board = Grid(N, p, q, M)
     while filled < M:
         i = randint(0, N - 1)
         j = randint(0, N - 1)
 
-        while not board.cellFilled(i, j):
-            possible_values = board.grid[i][j]
-            if len(possible_values) == 0:
-                board.clear()
+        while not board.cell_filled(i, j):
+            cell = board.grid[i][j]
+            if len(cell.possible_tokens) == 0:
+                board.reset()
                 filled = 0
-                print 'restarting'
+                print 'restarting..'
                 break
             else:
-                random_value = sample(possible_values, 1)[0]
-                if board.violatesConstraints(i, j, random_value):
-                    possible_values.discard(random_value)
+                random_value = sample(cell.possible_tokens, 1)[0]
+                if board.violates_constraints(i, j, random_value):
+                    cell.possible_tokens.discard(random_value)
                 else:
                     board.assign(i, j, random_value)
                     filled += 1
-                    print 'chose', filled, 'values', 'added', random_value, 'to', i, j
-                    board.display()
     return board
 
 
-#print str(generate(9, 3, 3, 25))
+if __name__ == "__main__":
+    if len(sys.argv) != 3:
+        print "generator accepts exactly 2 arguments (", len(sys.argv)-1, " given)."
+        exit(-1)
 
-generate(2, 2, 1, 4).display()
+    input_filename, output_filename = sys.argv[1:3]
+
+    print 'Reading input file...'
+    N, p, q, M = read_file(input_filename)
+    verify_input(N, p, q, M)
+
+    print 'Done. Generating board...'
+    board = generate(N, p, q, M)
+    print 'Done. Writing to output file...'
+    write_file(board, output_filename)
+    print 'Finished.'
+    board.display()

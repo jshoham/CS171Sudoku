@@ -11,14 +11,20 @@ class Grid(object):
         self.grid = [[Cell(N) for i in xrange(N)] for j in xrange(N)]
 
     def __str__(self):
-        grid_str = str(self.N) + " " + str(self.p) + " " + str(self.q) + " " \
-                   + str(self.M) + "\n"
+        param_list = [str(self.N), str(self.p), str(self.q), str(self.M)]
+        row_list = []
+        row_list.append(' '.join(param_list))
 
         for row in range(self.N):
+            cell_list = []
             for col in range(self.N):
-                grid_str += str(self.cellValue(row, col)) + " "
-            grid_str += '\n'
+                cell_list.append(str(self.cell_value(row, col)))
+            row_list.append(' '.join(cell_list))
+        grid_str = '\n'.join(row_list)
         return grid_str
+
+    def __repr__(self):
+        return str(self)
 
     def display(self, x=None, y=None):
         width = len(str(self.N)) + 1
@@ -29,7 +35,7 @@ class Grid(object):
             line = ''
             for col in range(self.N):
                 if col%self.q == 0 and col != 0: line += '|' # column separator
-                cell_value = self.cellValue(row, col)
+                cell_value = self.cell_value(row, col)
                 if row == x and col == y:
                     cell_value = '*'
                 if cell_value == 0:
@@ -38,17 +44,17 @@ class Grid(object):
                     line += str(cell_value).center(width)
             print line
 
-    def displayCell(self, x, y):
+    def display_cell(self, x, y):
         cell = self.grid[x][y]
         print 'Contents of cell at (', x, ',', y, '): token:', cell.token, 'possible tokens:', cell.possible_tokens
 
-    def randomFill(self):
+    def random_fill(self):
         for i in range(self.N):
             for j in range(self.N):
                 cell = self.grid[i][j]
                 cell.token = randint(0, self.N)
 
-    def clear(self):
+    def reset(self):
         for i in range(self.N):
             for j in range(self.N):
                 cell = self.grid[i][j]
@@ -60,7 +66,7 @@ class Grid(object):
     def choose(self, x, y, value):
         cell = self.grid[x][y]
         if value in cell.possible_tokens:
-            self.propagateConstraints(x, y, value)
+            self.propagate_constraints(x, y, value)
             cell.token = value
             return True
         else:
@@ -70,7 +76,7 @@ class Grid(object):
     def assign(self, x, y, value):
         self.grid[x][y].token = value
 
-    def propagateConstraints(self, x, y, value):
+    def propagate_constraints(self, x, y, value):
         # remove value as a candidate from all peers in the same box
         upperleft_x = x - x%self.p
         upperleft_y = y - y%self.q
@@ -88,7 +94,7 @@ class Grid(object):
 
 
     # checks if placing value in the cell at (x, y) will violate a row/column/box constraint
-    def violatesConstraints(self, x, y, value):
+    def violates_constraints(self, x, y, value):
         if value == 0: # zero designates an empty cell and thus never causes a violation
             return False
 
@@ -97,23 +103,23 @@ class Grid(object):
         upperleft_y = y - y%self.q
         for row in range(upperleft_x, upperleft_x+self.p):
             for col in range(upperleft_y, upperleft_y+self.q):
-                if self.cellValue(row, col) == value:
+                if self.cell_value(row, col) == value:
                    return True
 
         # next check if value is contained in a peer cell in the same row or column
         for cell in range(self.N):
-            if self.cellValue(cell, y) == value:
+            if self.cell_value(cell, y) == value:
                 return True
-            if self.cellValue(x, cell) == value:
+            if self.cell_value(x, cell) == value:
                 return True
 
         return False
 
 
-    def cellFilled(self, x, y):
+    def cell_filled(self, x, y):
         return self.grid[x][y].token != 0
 
-    def cellValue(self, x, y):
+    def cell_value(self, x, y):
         return self.grid[x][y].token
 
 class Cell(object):

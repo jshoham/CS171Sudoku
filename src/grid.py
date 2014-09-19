@@ -11,9 +11,8 @@ class Grid(object):
         self.grid = [[Cell(N) for i in xrange(N)] for j in xrange(N)]
 
     def __str__(self):
-        param_list = [str(self.N), str(self.p), str(self.q), str(self.M)]
-        row_list = []
-        row_list.append(' '.join(param_list))
+        param_list = [str(self.N), str(self.p), str(self.q)]
+        row_list = [' '.join(param_list)]
 
         for row in range(self.N):
             cell_list = []
@@ -31,10 +30,14 @@ class Grid(object):
         row_separator = '+'.join(['-' * (width * self.q)] * self.p)
 
         for row in range(self.N):
-            if row%self.p == 0 and row != 0: print row_separator
+            if row % self.p == 0 and row != 0:
+                print row_separator
+
             line = ''
             for col in range(self.N):
-                if col%self.q == 0 and col != 0: line += '|' # column separator
+                if col % self.q == 0 and col != 0:
+                    line += '|'  # column separator
+
                 cell_value = self.cell_value(row, col)
                 if row == x and col == y:
                     cell_value = '*'
@@ -60,7 +63,7 @@ class Grid(object):
                 cell = self.grid[i][j]
                 cell.token = 0
                 cell.possible_tokens.clear()
-                cell.possible_tokens.update(range(1,self.N+1))
+                cell.possible_tokens.update(range(1, self.N + 1))
 
     # sets the cell at (x, y) to value, then runs a constraint propagation
     def choose(self, x, y, value):
@@ -78,10 +81,10 @@ class Grid(object):
 
     def propagate_constraints(self, x, y, value):
         # remove value as a candidate from all peers in the same box
-        upperleft_x = x - x%self.p
-        upperleft_y = y - y%self.q
-        for row in range(upperleft_x, upperleft_x+self.p):
-            for col in range(upperleft_y, upperleft_y+self.q):
+        upperleft_x = x - x % self.p
+        upperleft_y = y - y % self.q
+        for row in range(upperleft_x, upperleft_x + self.p):
+            for col in range(upperleft_y, upperleft_y + self.q):
                 self.grid[row][col].possible_tokens.discard(value)
 
         # remove value as a candidate from all peers in the same row and column
@@ -92,19 +95,18 @@ class Grid(object):
         # the cell at (x, y) will be cleared during the propagation process so re-add it
         self.grid[x][y].possible_tokens.add(value)
 
-
     # checks if placing value in the cell at (x, y) will violate a row/column/box constraint
     def violates_constraints(self, x, y, value):
-        if value == 0: # zero designates an empty cell and thus never causes a violation
+        if value == 0:  # zero designates an empty cell and thus never causes a violation
             return False
 
         # first check if value is contained in a peer cell in the same box
-        upperleft_x = x - x%self.p
-        upperleft_y = y - y%self.q
-        for row in range(upperleft_x, upperleft_x+self.p):
-            for col in range(upperleft_y, upperleft_y+self.q):
+        upperleft_x = x - x % self.p
+        upperleft_y = y - y % self.q
+        for row in range(upperleft_x, upperleft_x + self.p):
+            for col in range(upperleft_y, upperleft_y + self.q):
                 if self.cell_value(row, col) == value:
-                   return True
+                    return True
 
         # next check if value is contained in a peer cell in the same row or column
         for cell in range(self.N):
@@ -115,16 +117,14 @@ class Grid(object):
 
         return False
 
-
     def cell_filled(self, x, y):
         return self.grid[x][y].token != 0
 
     def cell_value(self, x, y):
         return self.grid[x][y].token
 
-class Cell(object):
 
+class Cell(object):
     def __init__(self, N):
         self.token = 0
-        self.possible_tokens = set(range(1, N+1))
-
+        self.possible_tokens = set(range(1, N + 1))

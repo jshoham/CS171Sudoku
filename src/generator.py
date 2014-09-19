@@ -5,8 +5,6 @@ from random import *
 import sys
 
 
-
-
 def read_file(input_filename):
     f = None
     try:

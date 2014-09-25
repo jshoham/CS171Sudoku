@@ -1,49 +1,25 @@
-from grid import Grid
-from random import sample, randint
 import sys
+from random import sample, randint
+from grid import Grid
+import verifier
 
 
 def read_file(filename):
     f_str = ''
     try:
         with open(filename) as f:
-            f_str = f.readline()
+            f_str = f.read()
     except:
-        print 'Failed to open input file.'
+        print "Failed to open file", filename
         exit(-1)
-
-    line = f_str.split()
-    param_list = []
-    try:
-        if len(line) == 4:
-            param_list = [int(x) for x in line]
-        else:
-            exit(-1)
-    except:
-        print 'Input file is not in the correct format. Ensure that the input file only contains' \
-              'four integers on one line, separated by spaces.'
-        exit(-1)
-
-    return param_list
-
-def verify_input(N, p, q, M):
-    verify = (N > 0) and \
-             (p > 0) and \
-             (q > 0) and \
-             (M >= 0) and \
-             (p*q == N) and \
-             (M <= N**N)
-
-    if not verify:
-        print 'Invalid parameters: Ensure that all parameters are positive integers and' \
-              ' N = p*q and M < N^2'
-        exit(-1)
+    return f_str
 
 
-def write_file(board, filename):
+def write_file(board_list, filename):
+    f_str = '\n'.join(str(board) for board in board_list)
     try:
         with open(filename, 'w+') as f:
-            f.write(str(board))
+            f.write(f_str)
     except:
         print 'Failed to open output file.'
         exit(-1)
@@ -82,18 +58,26 @@ def generate(N, p, q, M):
 
 if __name__ == "__main__":
     if len(sys.argv) != 3:
-        print "generator accepts exactly 2 arguments ({} given).".format(len(sys.argv)-1)
+        print "Incorrect usage: generator accepts exactly 2 arguments ({} given).".format(len(sys.argv) - 1)
         exit(-1)
 
     input_filename, output_filename = sys.argv[1:3]
+    how_many = 1
 
     print 'Reading input file "{}"...'.format(input_filename)
-    N, p, q, M = read_file(input_filename)
-    verify_input(N, p, q, M)
+    f_str = read_file(input_filename)
+    if not verifier.gen_input(f_str):
+        print 'Input file does not meet the required format: "N p q M"'
+        exit(-1)
 
     print 'Done. Generating board...'
-    board = generate(N, p, q, M)
+    board_list = []
+    N, p, q, M = [int(x) for x in f_str.split()]
+    for x in range(how_many):
+        board_list.append(generate(N, p, q, M))
+
     print 'Done. Writing to output file "{}"...'.format(output_filename)
-    write_file(board, output_filename)
+    write_file(board_list, output_filename)
     print 'Finished.'
-    board.display()
+    if how_many == 1:
+        board_list[0].display()

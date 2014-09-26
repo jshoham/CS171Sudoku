@@ -104,6 +104,44 @@ class Grid(object):
         # the cell at (x, y) will be cleared during the propagation process so re-add it
         self.grid[x][y].possible_tokens.add(value)
 
+    def forward_check(self, x, y, value):
+        # remove value as a candidate from all peers in the same box
+        upperleft_x = x - x % self.p
+        upperleft_y = y - y % self.q
+        for row in xrange(upperleft_x, upperleft_x + self.p):
+            for col in xrange(upperleft_y, upperleft_y + self.q):
+                if self.grid[row][col].token == 0:
+                    self.grid[row][col].eliminated_tokens[value] += 1
+
+        # remove value as a candidate from all peers in the same row and column
+        for cell in xrange(self.N):
+            if self.grid[x][cell].token == 0:
+                self.grid[x][cell].eliminated_tokens[value] += 1
+            if self.grid[cell][y].token == 0:
+                self.grid[cell][y].eliminated_tokens[value] += 1
+
+        # the cell at (x, y) will be cleared during the propagation process so re-add it
+        self.grid[x][y].eliminated_tokens[value] -= 1
+
+    #todo
+    def peers(self, x, y):
+        """Returns a list of all the peer cells of the given cell, in the form (x, y)"""
+        peer_list = []
+        upperleft_x = x - x % self.p
+        upperleft_y = y - y % self.q
+        for row in xrange(self.N):
+            for col in xrange(self.N):
+                in_peers = (row == x) or\
+                           (col == y) or\
+                           (upperleft_x <= row and
+                            row <= upperleft_x + x and
+                            upperleft_y <= col and
+                            col <= upperleft_y + y)
+                if in_peers:
+                    peer_list.append((row, col))
+
+        return peer_list
+
     # re-adds value as a possible token to all peers of cell (x, y) if they are empty
     def undo_constraints(self, x, y, value):
         # re-add value as a candidate from all peers in the same box
@@ -156,3 +194,4 @@ class Cell(object):
     def __init__(self, N):
         self.token = 0
         self.possible_tokens = set(range(1, N + 1))
+        self.eliminated_tokens = [0 for x in xrange(1, N +1)]

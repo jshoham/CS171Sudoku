@@ -80,20 +80,24 @@ def choose_empty_cell(board):
 
 # returns a list of possible tokens at (x, y) sorted in increasing order
 def order_possible_tokens(board, x, y):
-    return sorted(board.grid[x][y].possible_tokens)
+    return sorted(board.possible_tokens(x, y))
 
 
 def infer(board, x, y, value):
     if settings.fc:
-        board.propagate_constraints(x, y, value)
+        board.forward_check(x, y, value)
 
 
 def undo_infer(board, x, y, value):
     if settings.fc:
-        board.undo_constraints(x, y, value)
+        board.undo_forward_check(x, y, value)
 
 
 def backtrack(board):
+    elapsed_time = time.clock() - settings.start_time
+    if elapsed_time > settings.time_limit:
+        return board
+
     next_cell = choose_empty_cell(board)
     if next_cell is None:
         return board
@@ -150,6 +154,7 @@ def solve_puzzles(filename):
     p_list = puzzle_list(f_str)
 
     for each in p_list:
+        settings.start_time = time.clock()
         board = create_board(each)
         print '=====Puzzle====='
         board.display()
@@ -184,6 +189,8 @@ if __name__ == '__main__':
         exit(-1)
 
     input_filename = sys.argv[1]
+
+
 
     solve_puzzles(input_filename)
 

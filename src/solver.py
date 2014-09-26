@@ -29,6 +29,7 @@ import re
 import grid
 import generator
 import settings
+import verifier
 
 
 # opens the file and returns its contents as a string
@@ -49,8 +50,8 @@ def create_board(board_str):
     if matches:  # inline representation (81 chars on a line (9x9 puzzles only)
         N, p, q = 9, 3, 3
         board = grid.Grid(N, p, q)
-        for row in range(N):
-            for col in range(N):
+        for row in xrange(N):
+            for col in xrange(N):
                 cell_value = board_str[row * 9 + col]
                 cell_value = 0 if cell_value == '.' else int(cell_value)
                 board.assign(row, col, cell_value)
@@ -60,9 +61,9 @@ def create_board(board_str):
         row_list = board_str.splitlines()
         N, p, q = [int(x) for x in row_list[0].split()]
         board = grid.Grid(N, p, q)
-        for row in range(N):
+        for row in xrange(N):
             col_list = [int(x) for x in row_list[row + 1].split()]
-            for col in range(N):
+            for col in xrange(N):
                 board.assign(row, col, col_list[col])
         return board
 
@@ -70,8 +71,8 @@ def create_board(board_str):
 # returns the row and col coordinates of the next empty cell
 # returns None if there are no more empty cells
 def choose_empty_cell(board):
-    for row in range(board.N):
-        for col in range(board.N):
+    for row in xrange(board.N):
+        for col in xrange(board.N):
             if board.grid[row][col].token == 0:
                 return (row, col)
     return None
@@ -119,9 +120,6 @@ def backtrack(board):
 
 
 # returns a list strings with each entry containing an individual puzzle
-# todo note: puzzle_list() works fine if f_str is verified beforehand.
-# todo is it better practice to do verification first within this function or as a separate
-# todo function call before calling puzzle_list()?
 def puzzle_list(f_str):
     matches = re.findall(r'^([\d\.]+)$', f_str, re.MULTILINE)
     if matches:     # inline representation
@@ -135,7 +133,7 @@ def puzzle_list(f_str):
             N, p, q = [int(x) for x in f_str_lines[p_index].split()]
             puzzle_lines = [f_str_lines[p_index]]
 
-            for row in range(N):
+            for row in xrange(N):
                 puzzle_lines.append(f_str_lines[p_index + row + 1])
 
             puzzle_list.append('\n'.join(puzzle_lines))
@@ -146,6 +144,9 @@ def puzzle_list(f_str):
 
 def solve_puzzles(filename):
     f_str = read_file(filename)
+    if not verifier.valid_puzzles(f_str):
+        print 'Input file does not contain puzzle(s) in a valid format.'
+        exit(-1)
     p_list = puzzle_list(f_str)
 
     for each in p_list:
@@ -163,12 +164,12 @@ def solve(board):
 
 
 def time_solve(function, board, num):
-    for x in range(100):  # warming up for memory etc(???)
+    for x in xrange(100):  # warming up for memory etc(???)
         function(board)
 
     average_time = 0
 
-    for x in range(num):
+    for x in xrange(num):
         start_time = time.clock()
         function(board)
         end_time = time.clock()

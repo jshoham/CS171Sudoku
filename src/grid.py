@@ -12,9 +12,9 @@ class Grid(object):
         param_list = [str(self.N), str(self.p), str(self.q)]
         row_list = [' '.join(param_list)]
 
-        for row in range(self.N):
+        for row in xrange(self.N):
             cell_list = []
-            for col in range(self.N):
+            for col in xrange(self.N):
                 cell_list.append(str(self.cell_value(row, col)))
             row_list.append(' '.join(cell_list))
         grid_str = '\n'.join(row_list)
@@ -28,12 +28,12 @@ class Grid(object):
         row_separator = '+'.join(['-' * (width * self.q)] * self.p)
 
         row_list = []
-        for row in range(self.N):
+        for row in xrange(self.N):
             if row % self.p == 0 and row != 0:
                 row_list.append(row_separator)
 
             col_list = []
-            for col in range(self.N):
+            for col in xrange(self.N):
                 if col % self.q == 0 and col != 0:
                     col_list.append('|')  # column separator
 
@@ -54,20 +54,15 @@ class Grid(object):
         cell = self.grid[x][y]
         print 'Cell {}: token: {}, possible tokens: {}'.format((x, y), cell.token, cell.possible_tokens)
 
-    def random_fill(self):
-        for row in range(self.N):
-            for col in range(self.N):
-                self.grid[row][col].token = randint(0, self.N)
-
     def reset(self, x=None, y=None):
-        if x != None and y != None:
+        if x is not None and y is not None:
             cell = self.grid[x][y]
             cell.token = 0
             cell.possible_tokens.update(range(1, self.N + 1))
             return
 
-        for row in range(self.N):
-            for col in range(self.N):
+        for row in xrange(self.N):
+            for col in xrange(self.N):
                 cell = self.grid[row][col]
                 cell.token = 0
                 cell.possible_tokens.update(range(1, self.N + 1))
@@ -94,13 +89,13 @@ class Grid(object):
         # remove value as a candidate from all peers in the same box
         upperleft_x = x - x % self.p
         upperleft_y = y - y % self.q
-        for row in range(upperleft_x, upperleft_x + self.p):
-            for col in range(upperleft_y, upperleft_y + self.q):
+        for row in xrange(upperleft_x, upperleft_x + self.p):
+            for col in xrange(upperleft_y, upperleft_y + self.q):
                 if self.grid[row][col].token == 0:
                     self.grid[row][col].possible_tokens.discard(value)
 
         # remove value as a candidate from all peers in the same row and column
-        for cell in range(self.N):
+        for cell in xrange(self.N):
             if self.grid[x][cell].token == 0:
                 self.grid[x][cell].possible_tokens.discard(value)
             if self.grid[cell][y].token == 0:
@@ -114,13 +109,13 @@ class Grid(object):
         # re-add value as a candidate from all peers in the same box
         upperleft_x = x - x % self.p
         upperleft_y = y - y % self.q
-        for row in range(upperleft_x, upperleft_x + self.p):
-            for col in range(upperleft_y, upperleft_y + self.q):
+        for row in xrange(upperleft_x, upperleft_x + self.p):
+            for col in xrange(upperleft_y, upperleft_y + self.q):
                 if self.grid[row][col].token == 0:
                     self.grid[row][col].possible_tokens.add(value)
 
         # re-add value as a candidate from all peers in the same row and column
-        for cell in range(self.N):
+        for cell in xrange(self.N):
             if self.grid[x][cell].token == 0:
                 self.grid[x][cell].possible_tokens.add(value)
             if self.grid[cell][y].token == 0:
@@ -134,13 +129,13 @@ class Grid(object):
         # first check if value is contained in a peer cell in the same box
         upperleft_x = x - x % self.p
         upperleft_y = y - y % self.q
-        for row in range(upperleft_x, upperleft_x + self.p):
-            for col in range(upperleft_y, upperleft_y + self.q):
+        for row in xrange(upperleft_x, upperleft_x + self.p):
+            for col in xrange(upperleft_y, upperleft_y + self.q):
                 if self.grid[row][col].token == value and (row, col) != (x, y):
                     return True
 
         # next check if value is contained in a peer cell in the same row or column
-        for cell in range(self.N):
+        for cell in xrange(self.N):
             if self.grid[cell][y].token == value and (cell, y) != (x, y):
                 return True
             if self.grid[x][cell].token == value and (x, cell) != (x, y):
@@ -150,8 +145,8 @@ class Grid(object):
 
 
     def verify(self):
-        for row in range(self.N):
-            for col in range(self.N):
+        for row in xrange(self.N):
+            for col in xrange(self.N):
                 if self.violates_constraints(row, col, self.grid[row][col].token):
                     return False
         return True

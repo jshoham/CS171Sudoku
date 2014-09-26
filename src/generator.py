@@ -2,6 +2,7 @@ import sys
 from random import sample, randint
 from grid import Grid
 import verifier
+import settings
 
 
 def read_file(filename):
@@ -10,7 +11,7 @@ def read_file(filename):
         with open(filename) as f:
             f_str = f.read()
     except:
-        print "Failed to open file", filename
+        print "Failed to open input file", filename
         exit(-1)
     return f_str
 
@@ -21,7 +22,7 @@ def write_file(board_list, filename):
         with open(filename, 'w+') as f:
             f.write(f_str)
     except:
-        print 'Failed to open output file.'
+        print 'Failed to open output file', filename
         exit(-1)
 
 
@@ -62,7 +63,7 @@ if __name__ == "__main__":
         exit(-1)
 
     input_filename, output_filename = sys.argv[1:3]
-    how_many = 1
+    settings.gen_how_many = 1
 
     print 'Reading input file "{}"...'.format(input_filename)
     f_str = read_file(input_filename)
@@ -71,13 +72,11 @@ if __name__ == "__main__":
         exit(-1)
 
     print 'Done. Generating board...'
-    board_list = []
     N, p, q, M = [int(x) for x in f_str.split()]
-    for x in range(how_many):
-        board_list.append(generate(N, p, q, M))
+    board_list = [generate(N, p, q, M) for x in xrange(settings.gen_how_many)]
 
     print 'Done. Writing to output file "{}"...'.format(output_filename)
     write_file(board_list, output_filename)
     print 'Finished.'
-    if how_many == 1:
+    if settings.gen_how_many == 1:
         board_list[0].display()

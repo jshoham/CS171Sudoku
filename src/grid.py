@@ -1,6 +1,3 @@
-from random import randint
-
-
 class Grid(object):
     def __init__(self, N=9, p=3, q=3):
         self.N = N  # The number of tokens
@@ -24,10 +21,9 @@ class Grid(object):
         return str(self)
 
     def display(self, highlights=None):
-        """Displays the board in an easy to read format
+        """Displays the board in an easy to read format.
 
-        :param highlights: Optional, a list of cells to highlight in the form of tuples (x, y)
-        :return:
+        :param highlights: Optional, a list of (x, y) tuples representing cells to highlight
         """
         width = len(str(self.N)) + 1
         row_separator = '+'.join(['-' * (width * self.q)] * self.p)
@@ -52,38 +48,40 @@ class Grid(object):
 
             row_list.append(''.join(col_list))
 
-        display_str = '\n'.join(row_list)
-        print display_str
+        print '\n'.join(row_list)
 
-    # def display_cell(self, x, y):
-    # cell = self.grid[x][y]
-    # print 'Cell {}: token: {}, possible tokens: {}'.format((x, y), cell.token, cell.possible_tokens)
+    def display_cell(self, x, y):
+        """Displays information about the cell at (x, y)."""
+        cell = self.grid[x][y]
+        print 'Cell {}: token: {}, possible tokens: {}'.format((x, y), cell.token, self.possible_tokens(x, y))
 
     def reset(self, x=None, y=None):
+        """Resets the board, clearing all token values and eliminated candidates.
+
+        Optional: If parameters x and y are supplied then only the cell at (x, y) will be reset.
+        """
         if x is not None and y is not None:
             cell = self.grid[x][y]
             cell.token = 0
-            #cell.possible_tokens.update(range(1, self.N + 1))
-            cell.eliminated_tokens = [0 for x in xrange(self.N + 1)]
+            cell.eliminated_tokens = {key: 0 for key in xrange(1, self.N + 1)}
             return
 
         for row in xrange(self.N):
             for col in xrange(self.N):
                 cell = self.grid[row][col]
                 cell.token = 0
-                #cell.possible_tokens.update(range(1, self.N + 1))
-                cell.eliminated_tokens = [0 for x in xrange(self.N + 1)]
+                cell.eliminated_tokens = {key: 0 for key in xrange(1, self.N + 1)}
 
-    # sets the cell at (x, y) to value, without running a constraint propagation
     def assign(self, x, y, value):
+        """Assigns value to the cell at (x, y)"""
         self.grid[x][y].token = value
 
-    def undo_assign(self, x, y, ):
+    def undo_assign(self, x, y):
         self.grid[x][y].token = 0
 
     # eliminates possible_value from the cell at (x, y)
     # def eliminate(self, x, y, possible_value):
-    #     self.grid[x][y].possible_tokens.discard(possible_value)
+    # self.grid[x][y].possible_tokens.discard(possible_value)
 
     def cell_filled(self, x, y):
         return self.grid[x][y].token != 0
@@ -91,22 +89,38 @@ class Grid(object):
     def cell_value(self, x, y):
         return self.grid[x][y].token
 
+    def possible_tokens(self, x, y):
+        possible_tokens = []
+        cell = self.grid[x][y]
+        for value in xrange(1, self.N + 1):
+            if cell.eliminated_tokens[value] == 0:
+                possible_tokens.append(value)
+
+        return possible_tokens
+
     def forward_check(self, x, y, value):
-        # remove value as a candidate from all peers in the same box
+        """Removes value as a candidate in all peer cells of (x, y).
+
+        Return True if the board still has possible values for all of its cells.
+        Return False if any cell has all of its candidates eliminated.
+        """
+        viable = True
         for cell in self.peers(x, y):
-            cell_x, cell_y = cell
-            # if self.grid[cell_x][cell_y].token == 0:
-            self.grid[cell_x][cell_y].eliminated_tokens[value] += 1
+            row, col = cell
+            self.grid[row][col].eliminated_tokens[value] += 1
+            if not self.possible_tokens(row, col):
+                viable *= False
+        return viable
 
     def undo_forward_check(self, x, y, value):
         for cell in self.peers(x, y):
-            cell_x, cell_y = cell
-            # if self.grid[cell_x][cell_y].token == 0:
-            self.grid[cell_x][cell_y].eliminated_tokens[value] -= 1
+            row, col = cell
+            self.grid[row][col].eliminated_tokens[value] -= 1
 
     def peers(self, x, y):
         """Returns a list of all the peer cells of the given cell, in the form (x, y)"""
 
+        # upperleft_x and upperleft_y designate the upper left corner of the peer box
         upperleft_x = x - x % self.p
         upperleft_y = y - y % self.q
 
@@ -119,31 +133,31 @@ class Grid(object):
 
         return box + row + col
 
-    # checks if placing value in the cell at (x, y) will violate a row/column/box constraint
     def violates_constraints(self, x, y, value):
+        """Checks if assigning value to the cell at (x, y) violates a row/column/box constraint."""
         if value == 0:  # zero designates an empty cell and thus never causes a violation
             return False
 
         for cell in self.peers(x, y):
-            cell_x, cell_y = cell
-            if self.grid[cell_x][cell_y].token == value:
+            row, col = cell
+            if self.grid[row][col].token == value:
                 return True
 
         return False
-
-    def possible_tokens(self, x, y):
-        possible_tokens = []
-        cell = self.grid[x][y]
-        for value in xrange(1, self.N + 1):
-            if cell.eliminated_tokens[value] == 0:
-                possible_tokens.append(value)
-
-        return possible_tokens
 
     def verify(self):
         for row in xrange(self.N):
             for col in xrange(self.N):
                 if self.violates_constraints(row, col, self.grid[row][col].token):
+                    return False
+        return True
+
+    def solved(self):
+        """Returns true if the board has a complete and consistent assignment, False otherwise."""
+        for row in xrange(self.N):
+            for col in xrange(self.N):
+                cell_value = self.cell_value(row, col)
+                if cell_value == 0 or self.violates_constraints(row, col, cell_value):
                     return False
         return True
 

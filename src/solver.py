@@ -27,13 +27,19 @@ import sys
 import time
 import re
 import grid
-import generator
 import settings
 import verifier
 
 
-# opens the file and returns its contents as a string
+time_overall_start = None
+time_search_start = None
+assignments = None
+solution = None
+timeout = None
+
+
 def read_file(filename):
+    """Opens the file and returns its contents as a string."""
     f_str = ''
     try:
         with open(filename) as f:
@@ -44,8 +50,31 @@ def read_file(filename):
     return f_str
 
 
-# creates a single puzzle based on the given string representation
+def puzzle_list(f_str):
+    """Returns a list strings with each element containing an individual puzzle."""
+    matches = re.findall(r'^([\d\.]+)$', f_str, re.MULTILINE)
+    if matches:     # inline representation
+        return matches
+    else:       # default representation
+        puzzle_list = []
+        f_str_lines = f_str.splitlines()
+        p_index = 0
+
+        while p_index < len(f_str_lines):
+            N, p, q = [int(x) for x in f_str_lines[p_index].split()]
+            puzzle_lines = [f_str_lines[p_index]]
+
+            for row in xrange(N):
+                puzzle_lines.append(f_str_lines[p_index + row + 1])
+
+            puzzle_list.append('\n'.join(puzzle_lines))
+            p_index += N + 1
+
+        return puzzle_list
+
+
 def create_board(board_str):
+    """Creates a single puzzle based on the given string representation."""
     matches = re.match(r'^([\d\.]+)$', board_str, re.MULTILINE)
     if matches:  # inline representation (81 chars on a line (9x9 puzzles only)
         N, p, q = 9, 3, 3
@@ -68,9 +97,8 @@ def create_board(board_str):
         return board
 
 
-# returns the row and col coordinates of the next empty cell
-# returns None if there are no more empty cells
 def choose_empty_cell(board):
+    """Returns the next empty cell as a tuple (row, col), or None if there are no more empty cells."""
     for row in xrange(board.N):
         for col in xrange(board.N):
             if board.grid[row][col].token == 0:
@@ -78,14 +106,15 @@ def choose_empty_cell(board):
     return None
 
 
-# returns a list of possible tokens at (x, y) sorted in increasing order
 def order_possible_tokens(board, x, y):
+    """Returns a list of possible tokens at (x, y) sorted in increasing order."""
     return sorted(board.possible_tokens(x, y))
 
 
 def infer(board, x, y, value):
     if settings.fc:
-        board.forward_check(x, y, value)
+        return board.forward_check(x, y, value)
+    return True
 
 
 def undo_infer(board, x, y, value):
@@ -94,59 +123,55 @@ def undo_infer(board, x, y, value):
 
 
 def backtrack(board):
-    elapsed_time = time.clock() - settings.start_time
-    if elapsed_time > settings.time_limit:
+    global time_search_start
+    global assignments
+    global timeout
+
+    elapsed_time = time.clock() - time_search_start
+    if elapsed_time >= settings.time_limit:
+        timeout = True
         return board
 
     next_cell = choose_empty_cell(board)
     if next_cell is None:
         return board
     next_x, next_y = next_cell
+    #print "Possible values at ({},{}): {}".format(next_x, next_y, order_possible_tokens(board, next_x, next_y))
 
     for value in order_possible_tokens(board, next_x, next_y):
-        # print 'considering {} at ({},{})'.format(value, next_x, next_y)
+        #print 'considering {} at ({},{})'.format(value, next_x, next_y)
         if not board.violates_constraints(next_x, next_y, value):
-            # print 'assigning {} to ({},{})'.format(value, next_x, next_y)
-            board.assign(next_x, next_y, value)
-            #board.display()
-            infer(board, next_x, next_y, value)
-            result = backtrack(board)
-            if result is not None:
-                return result
-            else:
+            viable = infer(board, next_x, next_y, value)
+            if viable:
+                #print 'assigning {} to ({},{})'.format(value, next_x, next_y)
+                board.assign(next_x, next_y, value)
+                assignments += 1
+                #board.display()
+                result = backtrack(board)
+                if result is not None:
+                    return result
                 #print 'removing {} from ({},{})'.format(value, next_x, next_y)
-                undo_infer(board, next_x, next_y, value)
                 board.undo_assign(next_x, next_y)
                 #board.display()
+            undo_infer(board, next_x, next_y, value)
 
-    # print 'ran out of values to consider for ({},{})'.format(next_x, next_y)
+    #print 'ran out of values to consider for ({},{})'.format(next_x, next_y)
     return None
 
 
-# returns a list strings with each entry containing an individual puzzle
-def puzzle_list(f_str):
-    matches = re.findall(r'^([\d\.]+)$', f_str, re.MULTILINE)
-    if matches:     # inline representation
-        return matches
-    else:       # default representation
-        puzzle_list = []
-        f_str_lines = f_str.splitlines()
-        p_index = 0
-
-        while p_index < len(f_str_lines):
-            N, p, q = [int(x) for x in f_str_lines[p_index].split()]
-            puzzle_lines = [f_str_lines[p_index]]
-
-            for row in xrange(N):
-                puzzle_lines.append(f_str_lines[p_index + row + 1])
-
-            puzzle_list.append('\n'.join(puzzle_lines))
-            p_index += N + 1
-
-        return puzzle_list
+def solve(board):
+    return backtrack(board)
 
 
 def solve_puzzles(filename):
+    global time_overall_start
+    global time_search_start
+    global time_end
+    global assignments
+    global solution
+    global timeout
+
+
     f_str = read_file(filename)
     if not verifier.valid_puzzles(f_str):
         print 'Input file does not contain puzzle(s) in a valid format.'
@@ -154,33 +179,26 @@ def solve_puzzles(filename):
     p_list = puzzle_list(f_str)
 
     for each in p_list:
-        settings.start_time = time.clock()
+        time_overall_start = time.clock()
+        assignments = 0
+        timeout = False
         board = create_board(each)
         print '=====Puzzle====='
         board.display()
+
+        time_search_start = time.clock()
+        board = solve(board)
+        time_end = time.clock()
+        solved = board.solved() if board else False
+
         print '=====Solution====='
-        solve(board).display()
-
+        print 'Search Time: ', 1000*(time_end - time_search_start), ' milliseconds'
+        print 'Assignments: ', assignments
+        print 'Solution: ', 'Yes' if solved else 'No'
+        print 'Timeout: ', 'Yes' if timeout else 'No'
+        if solved:
+            board.display()
     return
-
-
-def solve(board):
-    return backtrack(board)
-
-
-def time_solve(function, board, num):
-    for x in xrange(100):  # warming up for memory etc(???)
-        function(board)
-
-    average_time = 0
-
-    for x in xrange(num):
-        start_time = time.clock()
-        function(board)
-        end_time = time.clock()
-        average_time += end_time - start_time
-
-    return average_time / num
 
 
 if __name__ == '__main__':

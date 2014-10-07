@@ -48,12 +48,12 @@ class Grid(object):
 
             row_list.append(''.join(col_list))
 
-        print '\n'.join(row_list)
+        return '\n'.join(row_list)
 
     def display_cell(self, x, y):
         """Displays information about the cell at (x, y)."""
         cell = self.grid[x][y]
-        print 'Cell {}: token: {}, possible tokens: {}'.format((x, y), cell.token, self.possible_tokens(x, y))
+        print 'Cell {}: token: {}, possible values: {}'.format((x, y), cell.token, self.possible_values(x, y))
 
     def reset(self, x=None, y=None):
         """Resets the board, clearing all token values and eliminated candidates.
@@ -63,14 +63,14 @@ class Grid(object):
         if x is not None and y is not None:
             cell = self.grid[x][y]
             cell.token = 0
-            cell.eliminated_tokens = {key: 0 for key in xrange(1, self.N + 1)}
+            cell.possible_values.update(xrange(1, self.N + 1))
             return
 
         for row in xrange(self.N):
             for col in xrange(self.N):
                 cell = self.grid[row][col]
                 cell.token = 0
-                cell.eliminated_tokens = {key: 0 for key in xrange(1, self.N + 1)}
+                cell.possible_values.update(xrange(1, self.N + 1))
 
     def assign(self, x, y, value):
         """Assigns value to the cell at (x, y)"""
@@ -79,46 +79,92 @@ class Grid(object):
     def undo_assign(self, x, y):
         self.grid[x][y].token = 0
 
-    # eliminates possible_value from the cell at (x, y)
-    # def eliminate(self, x, y, possible_value):
-    # self.grid[x][y].possible_tokens.discard(possible_value)
+    def eliminate(self, x, y, possible_value):
+        """Eliminates possible_value from the cell at (x, y)"""
+        self.grid[x][y].possible_values.discard(possible_value)
+
+    def undo_eliminate(self, x, y, possible_value):
+        self.grid[x][y].possible_values.add(possible_value)
 
     def cell_filled(self, x, y):
         return self.grid[x][y].token != 0
 
+    def cell_empty(self, x, y):
+        return self.grid[x][y].token == 0
+
     def cell_value(self, x, y):
         return self.grid[x][y].token
 
-    def possible_tokens(self, x, y):
-        possible_tokens = []
-        cell = self.grid[x][y]
-        for value in xrange(1, self.N + 1):
-            if cell.eliminated_tokens[value] == 0:
-                possible_tokens.append(value)
+    def possible_values(self, x, y):
+        return self.grid[x][y].possible_values
 
-        return possible_tokens
+    def degree_heuristic(self, x, y):
+        """Returns the degree of the given cell to other unassigned cells.
 
-    def forward_check(self, x, y, value):
-        """Removes value as a candidate in all peer cells of (x, y).
+        To calculate the degree of a cell we need to count how many of its peers are both empty
+        and have at least 2 possible values. Cells which are empty but have only 1 possible value
+        are considered solved and are ignored by the degree heuristic, even if they haven't been
+        explicitly assigned by backtrack."""
+        # upperleft_x and upperleft_y designate the upper left corner of the peer box
+        upperleft_x = x - x % self.p
+        upperleft_y = y - y % self.q
 
-        Return True if the board still has possible values for all of its cells.
-        Return False if any cell has all of its candidates eliminated.
-        """
-        viable = True
-        for cell in self.peers(x, y):
-            row, col = cell
-            self.grid[row][col].eliminated_tokens[value] += 1
-            if not self.possible_tokens(row, col):
-                viable *= False
-        return viable
+        box_xs = [bxs for bxs in xrange(upperleft_x, upperleft_x + self.p)]
+        box_ys = [bys for bys in xrange(upperleft_y, upperleft_y + self.q)]
 
-    def undo_forward_check(self, x, y, value):
-        for cell in self.peers(x, y):
-            row, col = cell
-            self.grid[row][col].eliminated_tokens[value] -= 1
+        box = [(bxs, bys) for bxs in box_xs for bys in box_ys if (bxs, bys) != (x, y) and
+               self.cell_empty(bxs, bys) and
+               len(self.possible_values(bxs, bys)) > 1]
+        row = [(x, ys) for ys in xrange(0, upperleft_y) if self.cell_empty(x, ys) and
+               len(self.possible_values(x, ys)) > 1] + \
+              [(x, ys) for ys in xrange(upperleft_y + self.q, self.N) if self.cell_empty(x, ys) and
+               len(self.possible_values(x, ys)) > 1]
+        col = [(xs, y) for xs in xrange(0, upperleft_x) if self.cell_empty(xs, y) and
+               len(self.possible_values(xs, y)) > 1] + \
+              [(xs, y) for xs in xrange(upperleft_x + self.p, self.N) if self.cell_empty(xs, y) and
+               len(self.possible_values(xs, y)) > 1]
+
+        return len(box + row + col)
+
+    def degree_heuristic2(self, x, y):
+        upperleft_x = x - x % self.p
+        upperleft_y = y - y % self.q
+
+        degree = 0
+
+        # todo count the peers in box
+        box_xs = [bxs for bxs in xrange(upperleft_x, upperleft_x + self.p)]
+        box_ys = [bys for bys in xrange(upperleft_y, upperleft_y + self.q)]
+        for bxs, bys in [(bxs, bys) for bxs in box_xs for bys in box_ys]:
+            if self.cell_empty(bxs, bys) and len(self.possible_values(bxs, bys)) > 1 and (bxs, bys) != (x, y):
+                degree += 1
+
+        for ys in [range(0, upperleft_y) + range(upperleft_y + self.q, self.N)]:
+            if self.cell_empty(x, ys) and len(self.possible_values(x, ys)) > 1:
+                degree += 1
+
+        for xs in [range(0, upperleft_x) + range(upperleft_x + self.p, self.N)]:
+            if self.cell_empty(xs, y) and len(self.possible_values(xs, y)) > 1:
+                degree += 1
+
+        return degree
+
+    def empty_cells(self):
+        """Returns a list of all empty cells, in the form (x, y)."""
+        empties = []
+        for row in xrange(self.N):
+            for col in xrange(self.N):
+                if self.cell_empty(row, col):
+                    empties.append((row, col))
+        return empties
+
+    def empty_cells2(self):
+        # todo compare this implementation with the one above
+        """Alternate implementation"""
+        return [(row, col) for row in xrange(self.N) for col in xrange(self.N) if self.cell_empty(row, col)]
 
     def peers(self, x, y):
-        """Returns a list of all the peer cells of the given cell, in the form (x, y)"""
+        """Returns a list of all the peer cells of the given cell, in the form (x, y)."""
 
         # upperleft_x and upperleft_y designate the upper left corner of the peer box
         upperleft_x = x - x % self.p
@@ -128,8 +174,8 @@ class Grid(object):
         box_ys = [ys for ys in xrange(upperleft_y, upperleft_y + self.q)]
 
         box = [(xs, ys) for xs in box_xs for ys in box_ys if (xs, ys) != (x, y)]
-        row = [(xs, y) for xs in xrange(0, upperleft_x)] + [(xs, y) for xs in xrange(upperleft_x + self.p, self.N)]
-        col = [(x, ys) for ys in xrange(0, upperleft_y)] + [(x, ys) for ys in xrange(upperleft_y + self.q, self.N)]
+        row = [(x, ys) for ys in xrange(0, upperleft_y)] + [(x, ys) for ys in xrange(upperleft_y + self.q, self.N)]
+        col = [(xs, y) for xs in xrange(0, upperleft_x)] + [(xs, y) for xs in xrange(upperleft_x + self.p, self.N)]
 
         return box + row + col
 
@@ -138,14 +184,14 @@ class Grid(object):
         if value == 0:  # zero designates an empty cell and thus never causes a violation
             return False
 
-        for cell in self.peers(x, y):
-            row, col = cell
+        for (row, col) in self.peers(x, y):
             if self.grid[row][col].token == value:
                 return True
 
         return False
 
     def verify(self):
+        """Returns True if the board has no constraint violations, False otherwise."""
         for row in xrange(self.N):
             for col in xrange(self.N):
                 if self.violates_constraints(row, col, self.grid[row][col].token):
@@ -153,7 +199,7 @@ class Grid(object):
         return True
 
     def solved(self):
-        """Returns true if the board has a complete and consistent assignment, False otherwise."""
+        """Returns True if the board has a complete and consistent assignment, False otherwise."""
         for row in xrange(self.N):
             for col in xrange(self.N):
                 cell_value = self.cell_value(row, col)
@@ -165,5 +211,4 @@ class Grid(object):
 class Cell(object):
     def __init__(self, N):
         self.token = 0
-        # self.possible_tokens = set(range(1, N + 1))
-        self.eliminated_tokens = {key: 0 for key in xrange(1, N + 1)}
+        self.possible_values = set(xrange(1, N + 1))

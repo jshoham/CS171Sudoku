@@ -24,8 +24,10 @@
 
 
 import sys
+import os
 import time
 import re
+from random import sample
 import grid
 import settings
 import verifier
@@ -33,21 +35,19 @@ import verifier
 
 time_overall_start = None
 time_search_start = None
-assignments = None
+assignment_count = None
 solution = None
 timeout = None
 
 
 def read_file(filename):
     """Opens the file and returns its contents as a string."""
-    f_str = ''
     try:
         with open(filename) as f:
-            f_str = f.read()
+            return f.read()
     except:
         print "Failed to open file", filename
         exit(-1)
-    return f_str
 
 
 def puzzle_list(f_str):
@@ -56,7 +56,7 @@ def puzzle_list(f_str):
     if matches:     # inline representation
         return matches
     else:       # default representation
-        puzzle_list = []
+        p_list = []
         f_str_lines = f_str.splitlines()
         p_index = 0
 
@@ -67,10 +67,10 @@ def puzzle_list(f_str):
             for row in xrange(N):
                 puzzle_lines.append(f_str_lines[p_index + row + 1])
 
-            puzzle_list.append('\n'.join(puzzle_lines))
+            p_list.append('\n'.join(puzzle_lines))
             p_index += N + 1
 
-        return puzzle_list
+        return p_list
 
 
 def create_board(board_str):
@@ -99,36 +99,108 @@ def create_board(board_str):
 
 def choose_empty_cell(board):
     """Returns the next empty cell as a tuple (row, col), or None if there are no more empty cells."""
-    for row in xrange(board.N):
-        for col in xrange(board.N):
-            if board.grid[row][col].token == 0:
-                return (row, col)
-    return None
+    if settings.mrv:
+        empty_cells = board.empty_cells()
+        return choose_cell_mrv(board, empty_cells)
+    elif settings.dh:
+        empty_cells = board.empty_cells()
+        return choose_cell_dh(board, empty_cells)
+    else:
+        for row in xrange(board.N):
+            for col in xrange(board.N):
+                if not board.cell_filled(row, col):
+                    return row, col
+        return None
 
 
-def order_possible_tokens(board, x, y):
+def choose_cell_random(cell_list):
+    """Chooses a random cell from the given list. Useful for testing and debugging."""
+    if not cell_list:
+        return None
+    return sample(cell_list, 1)[0]
+
+
+def choose_cell_mrv(board, cell_list):
+    """Chooses the next empty cell which has the fewest possible remaining values.
+
+    Ties are broken arbitrarily, or by DH if it is turned on.
+    """
+    if not cell_list:
+        return None
+    mrv_cell = cell_list[0]
+
+    mrv_cell = min(cell_list, key=(lambda cell: len(board.possible_values(*cell)))) if cell_list else None
+    return mrv_cell
+
+
+def choose_cell_dh(board, cell_list):
+    """Chooses the next empty cell which has the highest degree to other unassigned cells.
+
+    The chosen cell will have the greatest number of peers which are unassigned and have at least
+    2 possible values. Cells which have only 1 possible value are considered solved by the degree
+    heuristic, even if they haven't been explicitly assigned by backtrack.
+    """
+    if not cell_list:
+        return None
+    dh_cell = cell_list[0]
+    dh_degree = board.degree_heuristic(*dh_cell)
+    for cell in cell_list:
+        cell_degree = board.degree_heuristic(*cell)
+        if cell_degree > dh_degree:
+            dh_cell = cell
+            dh_degree = cell_degree
+
+    return dh_cell
+
+
+def order_possible_values(board, x, y):
     """Returns a list of possible tokens at (x, y) sorted in increasing order."""
-    return sorted(board.possible_tokens(x, y))
+    return sorted(board.possible_values(x, y))
+
+
+def forward_check(board, x, y, value):
+    """Removes value as a possible value from all the peers of cell (x, y).
+
+    forward_check() only modifies peers where value is a possible value.
+
+    forward_check() returns two items, changed_list and viable. changed_list is a list which
+    contains the (x, y) of each cell that has been modified, while viable dictates whether
+    all modified cells still have remaining possible values.
+    """
+    viable = True
+    changed_list = []
+    for (row, col) in board.peers(x, y):
+        if value in board.possible_values(row, col):
+            changed_list.append((row, col))
+            board.eliminate(row, col, value)
+            if not board.possible_values(row, col):
+                viable = False
+    return changed_list, viable
+
+
+def undo_forward_check(board, value, inference):
+    for (row, col) in inference:
+        board.undo_eliminate(row, col, value)
 
 
 def infer(board, x, y, value):
     if settings.fc:
-        return board.forward_check(x, y, value)
-    return True
+        return forward_check(board, x, y, value)
+    return True, True
 
 
-def undo_infer(board, x, y, value):
+def undo_infer(board, x, y, value, inference):
     if settings.fc:
-        board.undo_forward_check(x, y, value)
+        undo_forward_check(board, value, inference)
 
 
-def backtrack(board):
+def backtrack(board, assignment):
     global time_search_start
-    global assignments
+    global assignment_count
     global timeout
 
     elapsed_time = time.clock() - time_search_start
-    if elapsed_time >= settings.time_limit:
+    if elapsed_time >= settings.time_limit and settings.time_limit != 0:
         timeout = True
         return board
 
@@ -136,55 +208,60 @@ def backtrack(board):
     if next_cell is None:
         return board
     next_x, next_y = next_cell
-    #print "Possible values at ({},{}): {}".format(next_x, next_y, order_possible_tokens(board, next_x, next_y))
 
-    for value in order_possible_tokens(board, next_x, next_y):
-        #print 'considering {} at ({},{})'.format(value, next_x, next_y)
+    if settings.solver_verbose:
+        print "Possible values at ({},{}): {}".format(next_x, next_y, order_possible_values(board, next_x, next_y))
+    for value in order_possible_values(board, next_x, next_y):
+        if settings.solver_verbose:
+            print 'considering {} at ({},{})'.format(value, next_x, next_y)
         if not board.violates_constraints(next_x, next_y, value):
-            viable = infer(board, next_x, next_y, value)
+            inferences, viable = infer(board, next_x, next_y, value)
             if viable:
-                #print 'assigning {} to ({},{})'.format(value, next_x, next_y)
+                assignment.append(inferences)
                 board.assign(next_x, next_y, value)
-                assignments += 1
-                #board.display()
-                result = backtrack(board)
-                if result is not None:
-                    return result
-                #print 'removing {} from ({},{})'.format(value, next_x, next_y)
-                board.undo_assign(next_x, next_y)
-                #board.display()
-            undo_infer(board, next_x, next_y, value)
+                assignment_count += 1
+                if settings.solver_verbose:
+                    print 'assigning {} to ({},{})'.format(value, next_x, next_y)
+                    print board.display()
+                elif settings.solver_display:
+                    os.system('CLS')
+                    sys.stdout.write(board.display() + '\n')
+                    sys.stdout.flush()
 
-    #print 'ran out of values to consider for ({},{})'.format(next_x, next_y)
+                result = backtrack(board, assignment)
+                if result:
+                    return result
+                board.undo_assign(next_x, next_y)
+                if settings.solver_verbose:
+                    print 'removing {} from ({},{})'.format(value, next_x, next_y)
+                    print board.display()
+                inferences = assignment.pop()
+            undo_infer(board, next_x, next_y, value, inferences)
+
+    if settings.solver_verbose:
+        print 'ran out of values to consider for ({},{})'.format(next_x, next_y)
     return None
 
 
 def solve(board):
-    return backtrack(board)
+    return backtrack(board, [])
 
 
-def solve_puzzles(filename):
+def solve_puzzles(board_list):
     global time_overall_start
     global time_search_start
     global time_end
-    global assignments
+    global assignment_count
     global solution
     global timeout
 
-
-    f_str = read_file(filename)
-    if not verifier.valid_puzzles(f_str):
-        print 'Input file does not contain puzzle(s) in a valid format.'
-        exit(-1)
-    p_list = puzzle_list(f_str)
-
-    for each in p_list:
+    for each in board_list:
         time_overall_start = time.clock()
-        assignments = 0
+        assignment_count = 0
         timeout = False
         board = create_board(each)
         print '=====Puzzle====='
-        board.display()
+        print board.display()
 
         time_search_start = time.clock()
         board = solve(board)
@@ -193,12 +270,27 @@ def solve_puzzles(filename):
 
         print '=====Solution====='
         print 'Search Time: ', 1000*(time_end - time_search_start), ' milliseconds'
-        print 'Assignments: ', assignments
+        print 'Assignments: ', assignment_count
         print 'Solution: ', 'Yes' if solved else 'No'
         print 'Timeout: ', 'Yes' if timeout else 'No'
         if solved:
-            board.display()
+            print board.display()
     return
+
+
+def run(filename):
+
+    f_str = read_file(filename)
+    if not verifier.valid_puzzles(f_str):
+        print 'Input file does not contain puzzle(s) in a valid format.'
+        exit(-1)
+    puzzles = puzzle_list(f_str)
+
+    solve_puzzles(puzzles)
+
+
+def ezrun():
+    run("easypuzzle.txt")
 
 
 if __name__ == '__main__':
@@ -208,8 +300,4 @@ if __name__ == '__main__':
 
     input_filename = sys.argv[1]
 
-
-
-    solve_puzzles(input_filename)
-
-
+    run(input_filename)

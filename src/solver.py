@@ -29,8 +29,9 @@ import time
 import re
 from random import sample
 import grid
-import settings
+import rw
 import verifier
+import settings
 
 
 time_overall_start = None
@@ -40,22 +41,12 @@ solution = None
 timeout = None
 
 
-def read_file(filename):
-    """Opens the file and returns its contents as a string."""
-    try:
-        with open(filename) as f:
-            return f.read()
-    except:
-        print "Failed to open file", filename
-        exit(-1)
-
-
 def puzzle_list(f_str):
     """Returns a list strings with each element containing an individual puzzle."""
     matches = re.findall(r'^([\d\.]+)$', f_str, re.MULTILINE)
-    if matches:     # inline representation
+    if matches:  # inline representation
         return matches
-    else:       # default representation
+    else:  # default representation
         p_list = []
         f_str_lines = f_str.splitlines()
         p_index = 0
@@ -128,9 +119,21 @@ def choose_cell_mrv(board, cell_list):
     if not cell_list:
         return None
     mrv_cell = cell_list[0]
-
-    mrv_cell = min(cell_list, key=(lambda cell: len(board.possible_values(*cell)))) if cell_list else None
+    mrv_v = len(board.possible_values(*mrv_cell))
+    for cell in cell_list[1:]:
+        cell_v = len(board.possible_values(*cell))
+        if cell_v < mrv_v:
+            mrv_cell = cell
+            mrv_v = cell_v
+        elif settings.dh and cell_v == mrv_v:
+            mrv_cell = choose_cell_dh(board, [mrv_cell, cell])
     return mrv_cell
+
+
+def choose_cell_mrv2(board, cell_list):
+    if not cell_list:
+        return None
+    return min(cell_list, key=(lambda cell: len(board.possible_values(*cell)))) if cell_list else None
 
 
 def choose_cell_dh(board, cell_list):
@@ -144,7 +147,7 @@ def choose_cell_dh(board, cell_list):
         return None
     dh_cell = cell_list[0]
     dh_degree = board.degree_heuristic(*dh_cell)
-    for cell in cell_list:
+    for cell in cell_list[1:]:
         cell_degree = board.degree_heuristic(*cell)
         if cell_degree > dh_degree:
             dh_cell = cell
@@ -153,9 +156,58 @@ def choose_cell_dh(board, cell_list):
     return dh_cell
 
 
+# todo implement
+def order_values_lcv(board, x, y):
+    return []
+
+
 def order_possible_values(board, x, y):
     """Returns a list of possible tokens at (x, y) sorted in increasing order."""
-    return sorted(board.possible_values(x, y))
+    if settings.lcv:
+        return order_values_lcv(board, x, y)
+    else:
+        return sorted(board.possible_values(x, y))
+
+
+def arc_consistency(board):
+    cells = [(row, col) for row in xrange(board.N) for col in xrange(board.N)]
+    arcs = [(cell_i, cell_j) for cell_i in cells for cell_j in board.peers(*cell_i)]
+
+    changed_list = []
+    while arcs:
+        cell_i, cell_j = arcs.pop()
+        revised, r_changed_list = revise(board, cell_i, cell_j)
+        if revised:
+            changed_list.append(r_changed_list)
+            if len(board.possible_values(*cell_i)) == 0:
+                return False, changed_list
+            for peer in board.peers(*cell_i):
+                if peer != cell_j:
+                    arcs.append((peer, cell_i))
+    return True, changed_list
+
+
+def revise(board, cell_i, cell_j):
+    revised = False
+    del_list = []
+    for value in board.possible_values(*cell_i):
+        domain_j = board.possible_values(*cell_j)
+        if (board.cell_filled(*cell_j) and board.cell_value(*cell_j) == value) or \
+                                len(domain_j) == 1 and value in domain_j:
+            del_list.append(value)
+            revised = True
+    for value in del_list:
+        board.eliminate(cell_i[0], cell_i[1], value)
+
+    changed_list = [cell_i, del_list]
+    return revised, changed_list
+
+def undo_ac_changes(board, changed_list):
+    for change in changed_list:
+        cell = change[0]
+        deleted_values = change[1]
+        for value in deleted_values:
+            board.undo_eliminate(cell[0], cell[1], value)
 
 
 def forward_check(board, x, y, value):
@@ -178,15 +230,16 @@ def forward_check(board, x, y, value):
     return changed_list, viable
 
 
-def undo_forward_check(board, value, inference):
-    for (row, col) in inference:
+def undo_forward_check(board, value, changed_list):
+    for (row, col) in changed_list:
         board.undo_eliminate(row, col, value)
 
 
 def infer(board, x, y, value):
     if settings.fc:
         return forward_check(board, x, y, value)
-    return True, True
+    else:
+        return True, True
 
 
 def undo_infer(board, x, y, value, inference):
@@ -195,7 +248,6 @@ def undo_infer(board, x, y, value, inference):
 
 
 def backtrack(board, assignment):
-    global time_search_start
     global assignment_count
     global timeout
 
@@ -263,13 +315,19 @@ def solve_puzzles(board_list):
         print '=====Puzzle====='
         print board.display()
 
+        if settings.acp:
+            solvable = arc_consistency(board)
+            if not solvable:
+                print 'ac found board to be unsolvable'
+                exit(-1)
+
         time_search_start = time.clock()
         board = solve(board)
         time_end = time.clock()
         solved = board.solved() if board else False
 
         print '=====Solution====='
-        print 'Search Time: ', 1000*(time_end - time_search_start), ' milliseconds'
+        print 'Search Time: ', 1000 * (time_end - time_search_start), ' milliseconds'
         print 'Assignments: ', assignment_count
         print 'Solution: ', 'Yes' if solved else 'No'
         print 'Timeout: ', 'Yes' if timeout else 'No'
@@ -279,8 +337,7 @@ def solve_puzzles(board_list):
 
 
 def run(filename):
-
-    f_str = read_file(filename)
+    f_str = rw.read_file(filename)
     if not verifier.valid_puzzles(f_str):
         print 'Input file does not contain puzzle(s) in a valid format.'
         exit(-1)
@@ -292,6 +349,14 @@ def run(filename):
 def ezrun():
     run("easypuzzle.txt")
 
+def ezboard(filename='easypuzzle.txt'):
+    return create_board(puzzle_list(rw.read_file(filename))[0])
+
+def ezinspect(board):
+    for row in xrange(board.N):
+        for col in xrange(board.N):
+            board.display_cell(row, col)
+
 
 if __name__ == '__main__':
     if len(sys.argv) != 2:
@@ -300,4 +365,10 @@ if __name__ == '__main__':
 
     input_filename = sys.argv[1]
 
-    run(input_filename)
+    file_list = ['1011rand', 'subig20', 'top91', 'top95', 'top100', 'top870', 'top1465', 'top2365',
+                 'topn87', 'topn234']
+    file_list = ['puzzles_' + f + '.txt' for f in file_list]
+
+    for f in file_list:
+        run(f)
+#    run(input_filename)

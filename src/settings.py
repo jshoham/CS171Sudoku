@@ -2,7 +2,7 @@
 fc = True
 
 # Minimum Remaining Values
-mrv = False
+mrv = True
 
 # Degree Heuristic
 dh = False
@@ -11,19 +11,19 @@ dh = False
 lcv = False
 
 # Arc Consistency Pre-processing
-acp = False
+acp = True
 
 # Arc Consistency
 ac = False
 
 # Timeout limit in seconds for backtracking search
 # Zero designates unlimited time
-time_limit = 30000
+time_limit = 5
 
 # Console Display
 # If set to True then the solver will visualize its progress in the console
 # while searching for a solution.
-solver_display = True
+solver_display = False
 
 # Console Display Verbose
 # Note: This setting overrides solver_display
@@ -35,5 +35,3 @@ gen_how_many = 10
 # Generator timeout limit in seconds
 # Zero designates unlimited time
 gen_time_limit = 3
-
-

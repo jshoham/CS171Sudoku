@@ -2,26 +2,9 @@ import sys
 from random import sample, randint
 import time
 from grid import Grid
+import rw
 import verifier
 import settings
-
-
-def read_file(filename):
-    try:
-        with open(filename) as f:
-            return f.read()
-    except:
-        print "Failed to open input file", filename
-        exit(-1)
-
-
-def write_file(filename, f_str):
-    try:
-        with open(filename, 'w+') as f:
-            f.write(f_str)
-    except:
-        print 'Failed to open output file', filename
-        exit(-1)
 
 
 # Generate a random puzzle by repeatedly picking a random vacant cell and assigning a
@@ -88,7 +71,7 @@ if __name__ == "__main__":
     input_filename, output_filename = sys.argv[1:3]
 
     print('Reading input file "{}"...'.format(input_filename))
-    f_str = read_file(input_filename)
+    f_str = rw.read_file(input_filename)
     if not verifier.gen_input(f_str):
         print 'Input file does not meet the required format: "N p q M"'
         exit(-1)
@@ -102,7 +85,7 @@ if __name__ == "__main__":
         exit(0)
 
     print 'Writing output to file "{}"...'.format(output_filename)
-    write_file(output_filename, '\n'.join(str(board) for board in board_list))
+    rw.write_file(output_filename, '\n'.join(str(board) for board in board_list))
     print 'Finished.'
     if settings.gen_how_many == 1:
         board_list[0].display()

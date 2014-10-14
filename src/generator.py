@@ -58,14 +58,8 @@ def generate_boards(N, p, q, M, quantity):
 
 
 if __name__ == "__main__":
-    if (not isinstance(settings.gen_how_many, (int, long))) or (settings.gen_how_many < 1):
-        print('Invalid value for <settings.gen_how_many> (must be an integer greater than 0). Defaulting to 1.')
-        settings.gen_how_many = 1
-    if (not isinstance(settings.gen_time_limit, (int, long, float))) or (settings.gen_time_limit < 0):
-        print('Invalid value for <settings.gen_time_limit> (must be a number greater or equal to 0). Defaulting to 5.')
-        settings.gen_time_limit = 5
     if len(sys.argv) != 3:
-        print('Incorrect usage: generator accepts exactly 2 arguments ({} given).'.format(len(sys.argv) - 1))
+        print('Incorrect usage: generator requires exactly 2 arguments ({} given).'.format(len(sys.argv) - 1))
         exit(-1)
 
     input_filename, output_filename = sys.argv[1:3]
@@ -88,4 +82,4 @@ if __name__ == "__main__":
     rw.write_file(output_filename, '\n'.join(str(board) for board in board_list))
     print 'Finished.'
     if settings.gen_how_many == 1:
-        board_list[0].display()
+        print board_list[0].display()

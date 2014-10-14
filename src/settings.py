@@ -29,7 +29,7 @@ solver_display_verbose = False
 # solver_export_data_summary - exports a summary of gathered data in a text file named <filename>'_data_summary.txt'
 solver_export_solution = True
 solver_export_raw_data = True
-solver_export_data_summary = False
+solver_export_data_summary = True
 
 ##### Generator Settings #####
 # gen_how_many - Number of puzzles for the generator to attempt to produce

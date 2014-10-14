@@ -126,28 +126,6 @@ class Grid(object):
 
         return len(box + row + col)
 
-    def degree_heuristic2(self, x, y):
-        upperleft_x = x - x % self.p
-        upperleft_y = y - y % self.q
-
-        degree = 0
-
-        box_xs = [bxs for bxs in xrange(upperleft_x, upperleft_x + self.p)]
-        box_ys = [bys for bys in xrange(upperleft_y, upperleft_y + self.q)]
-        for bxs, bys in [(bxs, bys) for bxs in box_xs for bys in box_ys]:
-            if self.cell_empty(bxs, bys) and len(self.possible_values(bxs, bys)) > 1 and (bxs, bys) != (x, y):
-                degree += 1
-
-        for ys in [range(0, upperleft_y) + range(upperleft_y + self.q, self.N)]:
-            if self.cell_empty(x, ys) and len(self.possible_values(x, ys)) > 1:
-                degree += 1
-
-        for xs in [range(0, upperleft_x) + range(upperleft_x + self.p, self.N)]:
-            if self.cell_empty(xs, y) and len(self.possible_values(xs, y)) > 1:
-                degree += 1
-
-        return degree
-
     def forward_check(self, x, y, value):
         """Removes value as a possible value from all the peers of cell (x, y).
 
@@ -219,18 +197,7 @@ class Grid(object):
             for value in values:
                 self.undo_eliminate(row, col, value)
 
-
     def empty_cells(self):
-        """Returns a list of all empty cells, in the form (x, y)."""
-        empties = []
-        for row in xrange(self.N):
-            for col in xrange(self.N):
-                if self.cell_empty(row, col):
-                    empties.append((row, col))
-        return empties
-
-    # todo compare this implementation with the one above
-    def empty_cells2(self):
         """Alternate implementation"""
         return [(row, col) for row in xrange(self.N) for col in xrange(self.N) if self.cell_empty(row, col)]
 

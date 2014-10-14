@@ -1,37 +1,38 @@
-# Forward Checking
+# User Changeable Settings
+
+##### Backtracking Settings #####
+# fc - Forward Checking
+# mrv - Minimum Remaining Values
+# dh - Degree Heuristic
+# lcv - Least Constraining Value (Note: setting is currently not implemented and has no effect)
+# acp - Arc Consistency Pre-processing
+# ac - Arc Consistency (Note: setting is currently not implemented and has no effect)
+# time_limit - Timeout limit in seconds for backtracking search (Zero designates unlimited time)
 fc = True
-
-# Minimum Remaining Values
 mrv = True
-
-# Degree Heuristic
-dh = False
-
-# Least Constraining Value
+dh = True
 lcv = False
-
-# Arc Consistency Pre-processing
 acp = True
-
-# Arc Consistency
 ac = False
+time_limit = 60
 
-# Timeout limit in seconds for backtracking search
-# Zero designates unlimited time
-time_limit = 5
+##### Console Display Settings #####
+# solver_display_realtime - displays a real-time visualization of backtracking search
+# solver_display_verbose - prints out LOTS of information while backtracking, use for debugging
+#       Note: This setting overrides solver_display_realtime
+solver_display_realtime = False
+solver_display_verbose = False
 
-# Console Display
-# If set to True then the solver will visualize its progress in the console
-# while searching for a solution.
-solver_display = False
+##### Solver Log Output Settings #####
+# solver_export_solution - exports solutions in a text file named <filename>'_solution.txt'
+# solver_export_raw_data - exports various gathered data in a text file named <filename>'_raw_data.txt'
+# solver_export_data_summary - exports a summary of gathered data in a text file named <filename>'_data_summary.txt'
+solver_export_solution = True
+solver_export_raw_data = True
+solver_export_data_summary = False
 
-# Console Display Verbose
-# Note: This setting overrides solver_display
-solver_verbose = False
-
-# Number of puzzles for the generator to produce
+##### Generator Settings #####
+# gen_how_many - Number of puzzles for the generator to attempt to produce
+# gen_time_limit - Generator timeout limit in seconds (Zero designates unlimited time)
 gen_how_many = 10
-
-# Generator timeout limit in seconds
-# Zero designates unlimited time
-gen_time_limit = 3
+gen_time_limit = 5

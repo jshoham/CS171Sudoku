@@ -132,7 +132,6 @@ class Grid(object):
 
         degree = 0
 
-        # todo count the peers in box
         box_xs = [bxs for bxs in xrange(upperleft_x, upperleft_x + self.p)]
         box_ys = [bys for bys in xrange(upperleft_y, upperleft_y + self.q)]
         for bxs, bys in [(bxs, bys) for bxs in box_xs for bys in box_ys]:
@@ -149,6 +148,78 @@ class Grid(object):
 
         return degree
 
+    def forward_check(self, x, y, value):
+        """Removes value as a possible value from all the peers of cell (x, y).
+
+        Only modifies peers which contain value as a possible value.
+        Returns True/False if the board is still viable, and a list of all changes made.
+        """
+        changed_list = []
+        for (row, col) in self.peers(x, y):
+            if value in self.possible_values(row, col):
+                changed_list.append(((row, col), [value]))
+                self.eliminate(row, col, value)
+                if not self.possible_values(row, col):
+                    return False, changed_list
+        return True, changed_list
+
+    def arc_consistency(self):
+        """Establishes arc consistency on board.
+
+        A cell i is arc consistent with another cell j if, for each possible value in i's domain,
+        j has a legal assignment. Naturally this is only significant when i and j are peers of
+        each other, as non-peer cells can never violate a constraint by their very nature. A board
+        is arc consistent if all of its cells are arc consistent with each of their peers.
+
+        Returns True if the board is solvable, False otherwise. Also returns a list of all changes
+        which have been made to board, so that they can be undone if needed.
+        """
+
+        def revise(board, cell_i, cell_j):
+            """Make cell_i arc consistent with cell_j. If a possible value in cell_i's
+            domain leaves cell_j with no legal assignment, then discard that value from
+            cell_i's domain. Returns True if cell_i's domain has been modified, False
+            otherwise. Also returns a record of all changes made to the cell.
+            """
+            revised = False
+            del_list = []
+            for value in board.possible_values(*cell_i):
+                domain_j = board.possible_values(*cell_j)
+                if board.cell_value(*cell_j) == value or (len(domain_j) == 1 and value in domain_j):
+                    del_list.append(value)
+                    revised = True
+            # We have to do all the eliminations here since we cannot edit the possible_values set
+            # while iterating over it. This is a property of the set built-in type in Python.
+            for value in del_list:
+                board.eliminate(cell_i[0], cell_i[1], value)
+
+            changed_record = (cell_i, del_list)
+            return revised, changed_record
+
+        cells = [(row, col) for row in xrange(self.N) for col in xrange(self.N)]
+        arcs = [(cell_i, cell_j) for cell_i in cells for cell_j in self.peers(*cell_i)]
+
+        changed_list = []  # track all changes made to board so they can be undone if needed
+        while arcs:
+            cell_i, cell_j = arcs.pop()
+            revised, r_changed_record = revise(self, cell_i, cell_j)
+            if revised:
+                changed_list.append(r_changed_record)
+                if len(self.possible_values(*cell_i)) == 0:
+                    return False, changed_list
+                for peer in self.peers(*cell_i):
+                    if peer != cell_j:
+                        arcs.append((peer, cell_i))
+        return True, changed_list
+
+    def undo_changes(self, changed_list):
+        """Undo changes made by forward check or arc consistency."""
+        for change in changed_list:
+            (row, col), values = change
+            for value in values:
+                self.undo_eliminate(row, col, value)
+
+
     def empty_cells(self):
         """Returns a list of all empty cells, in the form (x, y)."""
         empties = []
@@ -158,8 +229,8 @@ class Grid(object):
                     empties.append((row, col))
         return empties
 
+    # todo compare this implementation with the one above
     def empty_cells2(self):
-        # todo compare this implementation with the one above
         """Alternate implementation"""
         return [(row, col) for row in xrange(self.N) for col in xrange(self.N) if self.cell_empty(row, col)]
 

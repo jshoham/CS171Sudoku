@@ -57,12 +57,12 @@ def generate_boards(N, p, q, M, quantity):
     return board_list
 
 
-if __name__ == "__main__":
-    if len(sys.argv) != 3:
+def main(argv):
+    if len(argv) != 3:
         print('Incorrect usage: generator requires exactly 2 arguments ({} given).'.format(len(sys.argv) - 1))
         exit(-1)
 
-    input_filename, output_filename = sys.argv[1:3]
+    input_filename, output_filename = argv[1:3]
 
     print('Reading input file "{}"...'.format(input_filename))
     f_str = rw.read_file(input_filename)
@@ -83,3 +83,7 @@ if __name__ == "__main__":
     print 'Finished.'
     if settings.gen_how_many == 1:
         print board_list[0].display()
+
+
+if __name__ == "__main__":
+    main(sys.argv)

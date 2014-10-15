@@ -323,28 +323,13 @@ def run(filename):
         rw.write_file(data_summary_filename, data_summary_str)
 
 
-def db_run():
-    """Debugging use"""
-    run("easypuzzle.txt")
-
-
-def db_board(filename='easypuzzle.txt'):
-    """Debugging use"""
-    return create_board(puzzle_list(rw.read_file(filename))[0])
-
-
-def db_inspect(board):
-    """Debugging use"""
-    for row in xrange(board.N):
-        for col in xrange(board.N):
-            board.display_cell(row, col)
+def main(argv):
+    if len(argv) != 2:
+        print "solver.py requires exactly 1 argument ({} given).".format(len(sys.argv) - 1)
+        exit(-1)
+    input_filename = argv[1]
+    run(input_filename)
 
 
 if __name__ == '__main__':
-    if len(sys.argv) != 2:
-        print "solver.py requires exactly 1 argument ({} given).".format(len(sys.argv) - 1)
-        exit(-1)
-
-    input_filename = sys.argv[1]
-
-    run(input_filename)
+    main(sys.argv)

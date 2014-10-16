@@ -29,9 +29,9 @@ def user_settings():
                 'time_limit': 60,
                 'solver_display_realtime': False,
                 'solver_display_verbose': False,
-                'solver_export_solution': False,
-                'solver_export_raw_data': False,
-                'solver_export_data_summary': False,
+                'solver_export_solution': True,
+                'solver_export_raw_data': True,
+                'solver_export_data_summary': True,
                 'gen_how_many': 1,
                 'gen_time_limit': 5}
 
@@ -86,7 +86,7 @@ def user_settings():
         msg('gen_time_limit', 'Number greater or equal to zero')
 
 
-user_settings()
+user_settings() # This statement verifies user settings at run-time when verifier is imported
 
 # Generator input: Exactly one line containing four integers, N, p, q, and M, separated by spaces.
 # N = p*q and M <= N*N must be true. For example:
@@ -119,10 +119,24 @@ def gen_input(s):
 # 1 0 0 0 4 0
 # 0 2 0 0 1 5
 def board_default(s):
+    # It is not possible to verify this board format with regex alone, since the number of lines
+    # in a puzzle depends on the N value.
+    # Therefore, we do a broad level regex match to ensure that the string has 3 numbers on
+    # its first line, followed by 1 or more lines of numbers (we don't know how many lines
+    # there should be yet, or even if they are multiple puzzles)
     verified = re.match(r"""^(\d+(\s+\d+){2})       # puzzle parameters
                             (\n\d+(\s+\d+)*)\s*$    # 1 or more lines of numbers
                             """, s, re.VERBOSE)
     if verified:
+        # Now that we passed the first test, we can extract the values on the first line of
+        # the puzzle to get N, p, and q. Using these values we can look ahead on the next N
+        # lines to ensure conform to the puzzle format.
+        # Next we jump ahead to the (N + 1)th line. If this line is still within the string
+        # then it should contain 3 values, which form the parameter line of the next puzzle.
+        #
+        # If we detect an inconsistency or a format violation at any point in this process then
+        # quit and return False. If we reach the end then the string contains puzzle(s) in the
+        # valid default format.
         s_lines = s.splitlines()
         p_index = 0  # index of the starting line/parameter list of the next puzzle in the file
 

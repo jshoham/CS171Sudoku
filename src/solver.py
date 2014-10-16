@@ -310,22 +310,31 @@ def run(filename):
 
         averages = [sum(category) / float(len(category)) for category in zip(*raw_data_log[1:])]
 
-        init_time = 'Initialization Time: ' + str(averages[1] - averages[0])
-        search_time = 'Search Time: ' + str(averages[2] - averages[1])
-        total_time = 'Total Time: ' + str(averages[2] - averages[0])
-        assignments = 'Assignments: ' + str(averages[3])
-        solutions = 'Solution Frequency: ' + str(averages[4])
-        timeouts = 'Timeout Frequency: ' + str(averages[5])
+        total_time = 'Total Time:'.ljust(21) + format(averages[2] - averages[0], '.2f')
+        init_time = 'Initialization Time:'.ljust(21) + format(averages[1] - averages[0], '.2f')
+        search_time = 'Search Time:'.ljust(21) + format(averages[2] - averages[1], '.2f')
+        assignments = 'Assignments:'.ljust(21) + format(averages[3], '.2f')
+        solutions = 'Solution Frequency:'.ljust(21) + format(averages[4], '.3f')
+        timeouts = 'Timeout Frequency:'.ljust(21) + format(averages[5], '.3f')
+
+        settings_str = 'Settings:' \
+                       '\nForward Checking: ' + str(settings.fc) + \
+                       '\nMinimum Remaining Values: ' + str(settings.mrv) + \
+                       '\nDegree Heuristic: ' + str(settings.dh) + \
+                       '\nLeast Constraining Value: ' + str(settings.lcv) + \
+                       '\nArc Consistency Pre-Processing: ' + str(settings.acp) + \
+                       '\nArc Consistency: ' + str(settings.ac)
 
         data_summary_str = '\n'.join((summary_header, summary_divider,
                                       total_time, init_time, search_time,
-                                      assignments, solutions, timeouts))
+                                      assignments, solutions, timeouts, summary_divider,
+                                      settings_str))
         rw.write_file(data_summary_filename, data_summary_str)
 
 
 def main(argv):
     if len(argv) != 2:
-        print "solver.py requires exactly 1 argument ({} given).".format(len(sys.argv) - 1)
+        print "solver.py requires exactly 1 argument ({} given).".format(len(argv) - 1)
         exit(-1)
     input_filename = argv[1]
     run(input_filename)

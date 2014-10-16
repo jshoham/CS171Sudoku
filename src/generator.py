@@ -23,10 +23,11 @@ def generate(N, p, q, M, attempt=1, total=1):
     board = Grid(N, p, q)
     while filled < M:
         elapsed_time = time.clock() - time_start
-        if elapsed_time >= settings.gen_time_limit and settings.gen_time_limit:
+        if elapsed_time >= settings.gen_time_limit and settings.gen_time_limit != 0:
             sys.stdout.write('Timed out. Consider using a lower M value.\n')
             return None
 
+        # Choose a random cell to try
         row = randint(0, N - 1)
         col = randint(0, N - 1)
 
@@ -59,7 +60,7 @@ def generate_boards(N, p, q, M, quantity):
 
 def main(argv):
     if len(argv) != 3:
-        print('Incorrect usage: generator requires exactly 2 arguments ({} given).'.format(len(sys.argv) - 1))
+        print('Incorrect usage: generator requires exactly 2 arguments ({} given).'.format(len(argv) - 1))
         exit(-1)
 
     input_filename, output_filename = argv[1:3]

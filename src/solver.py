@@ -169,6 +169,21 @@ def undo_infer(board, x, y, value, changed_list):
 
 
 def backtrack(board, history=None, start_time=None):
+    """This backtracking algorithm closely follows the model from Chapter 6 of Norvig's
+    'Artifical Intelligence: A Modern Approach 3rd Edition' A brief outline of the algorithm
+    is as follows:
+        1. Choose an empty cell (if there are no empty cells then return the board as it is completed)
+        2. Order the values in that cell's domain, then pick the first value to try
+        3. If the chosen value doesn't violate a constraint, assign it to that cell
+            (otherwise move to the next value in the ordering)
+        4. Perform any inferences based on that assignment
+        5. Perform backtrack() on the resulting board (recursion "magic" happens here!)
+        6. If backtrack returns a solution then return that solution, otherwise
+        7. Undo the assignment and inferences
+        8. Proceed to the next value in the ordering from step 2, then proceed to step 3
+        9. If there are no more values left in the ordering from step 2, then return None
+            (This step will go "one level up" in the recursion and land at step 6)
+    """
     if not history:
         history = []
     if not start_time:
@@ -293,18 +308,23 @@ def run(filename):
 
     solve_puzzles(puzzles)
 
+    filename_parts = filename.split('.')
+    base = filename_parts[0]
+    ext = '.'.join(filename_parts[1:])  # This looks strange but it ensures that weird filenames with multiple dots
+                                        # will work as expected, like 'example.abc.de.txt'
+
     if settings.solver_export_solution:
-        solution_filename = filename[:-4] + '_solution.txt'
+        solution_filename = base + '_solution.' + ext
         solution_str = '\n'.join('\n'.join(entry) for entry in solution_log)
         rw.write_file(solution_filename, solution_str)
 
     if settings.solver_export_raw_data:
-        data_filename = filename[:-4] + '_raw_data.txt'
+        data_filename = base + '_raw_data.' + ext
         data_str = '\n'.join('\t'.join(str(item) for item in entry) for entry in raw_data_log)
         rw.write_file(data_filename, data_str)
 
     if settings.solver_export_data_summary:
-        data_summary_filename = filename[:-4] + '_data_summary.txt'
+        data_summary_filename = base + '_data_summary.' + ext
         summary_header = 'Average Data for {} Puzzles'.format(len(raw_data_log) - 1)
         summary_divider = '-' * len(summary_header)
 
@@ -327,8 +347,8 @@ def run(filename):
 
         data_summary_str = '\n'.join((summary_header, summary_divider,
                                       total_time, init_time, search_time,
-                                      assignments, solutions, timeouts, summary_divider,
-                                      settings_str))
+                                      assignments, solutions, timeouts,
+                                      summary_divider, settings_str))
         rw.write_file(data_summary_filename, data_summary_str)
 
 

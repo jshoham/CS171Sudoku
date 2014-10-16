@@ -8,11 +8,11 @@
 # acp - Arc Consistency Pre-processing
 # ac - Arc Consistency (Note: setting is currently not implemented and has no effect)
 # time_limit - Timeout limit in seconds for backtracking search (Zero designates unlimited time)
-fc = True
-mrv = True
-dh = True
+fc = False
+mrv = False
+dh = False
 lcv = False
-acp = True
+acp = False
 ac = False
 time_limit = 60
 

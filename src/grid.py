@@ -51,7 +51,7 @@ class Grid(object):
         return '\n'.join(row_list)
 
     def display_cell(self, x, y):
-        """Displays information about the cell at (x, y)."""
+        """Displays detailed information about the cell at (x, y)."""
         cell = self.grid[x][y]
         print 'Cell {}: token: {}, possible values: {}'.format((x, y), cell.token, self.possible_values(x, y))
 
@@ -152,7 +152,6 @@ class Grid(object):
         Returns True if the board is solvable, False otherwise. Also returns a list of all changes
         which have been made to board, so that they can be undone if needed.
         """
-
         def revise(board, cell_i, cell_j):
             """Make cell_i arc consistent with cell_j. If a possible value in cell_i's
             domain leaves cell_j with no legal assignment, then discard that value from
@@ -174,6 +173,7 @@ class Grid(object):
             changed_record = (cell_i, del_list)
             return revised, changed_record
 
+        # Begin Arc Consistency here by creating a stack of all arcs in the board
         cells = [(row, col) for row in xrange(self.N) for col in xrange(self.N)]
         arcs = [(cell_i, cell_j) for cell_i in cells for cell_j in self.peers(*cell_i)]
 
@@ -198,7 +198,7 @@ class Grid(object):
                 self.undo_eliminate(row, col, value)
 
     def empty_cells(self):
-        """Alternate implementation"""
+        """Returns a list of all the empty cells in the board, in the form (x, y)."""
         return [(row, col) for row in xrange(self.N) for col in xrange(self.N) if self.cell_empty(row, col)]
 
     def peers(self, x, y):

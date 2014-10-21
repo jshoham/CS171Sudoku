@@ -201,21 +201,22 @@ def backtrack(board, history=None, start_time=None):
         return board
     next_x, next_y = next_cell
 
-    if settings.solver_display_verbose and not settings.solver_display_realtime:
+    if settings.solver_display_verbose:
         print "Possible values at ({},{}): {}".format(next_x, next_y, order_possible_values(board, next_x, next_y))
     for value in order_possible_values(board, next_x, next_y):
-        if settings.solver_display_verbose and not settings.solver_display_realtime:
+        if settings.solver_display_verbose:
             print 'considering {} at ({},{})'.format(value, next_x, next_y)
         if not board.violates_constraints(next_x, next_y, value):
             board.assign(next_x, next_y, value)
             assignment_count += 1
 
-            if settings.solver_display_verbose and not settings.solver_display_realtime:
+            if settings.solver_display_verbose:
                 print 'assigning {} to ({},{})'.format(value, next_x, next_y)
                 print board.display()
             elif settings.solver_display_realtime:
                 os.system('CLS')
-                sys.stdout.write(board.display() + '\n')
+                frame = '\n'.join([unsolved_puzzle_str, solution_header, board.display()])
+                sys.stdout.write(frame + '\n')
                 sys.stdout.flush()
 
             viable, inferences = infer(board, next_x, next_y, value)
@@ -228,11 +229,11 @@ def backtrack(board, history=None, start_time=None):
             undo_infer(board, next_x, next_y, value, inferences)
             board.undo_assign(next_x, next_y)
 
-            if settings.solver_display_verbose and not settings.solver_display_realtime:
+            if settings.solver_display_verbose:
                 print 'removing {} from ({},{})'.format(value, next_x, next_y)
                 print board.display()
 
-    if settings.solver_display_verbose and not settings.solver_display_realtime:
+    if settings.solver_display_verbose:
         print 'ran out of values to consider for ({},{})'.format(next_x, next_y)
     return None
 
@@ -244,12 +245,19 @@ def solve(board, start_time=None):
 def solve_puzzles(board_list):
     global assignment_count
     global timeout
+    global unsolved_puzzle_str
+    global solution_header
+    global solution_str
     global raw_data_log
     global solution_log
 
     pnum = 1
     ptotal = len(board_list)
+    solution_str = ''
     for each in board_list:
+        if settings.solver_display_realtime and not settings.solver_display_verbose:
+            os.system('CLS')  # Clear out old console output if realtime is on
+
         time_overall_start = time.clock()
         assignment_count = 0
         timeout = False
@@ -259,8 +267,8 @@ def solve_puzzles(board_list):
 
         puzzle_header = '==Puzzle {}/{}=='.format(pnum, ptotal).center(2 * board.N, '=')
         solution_header = '==Solution {}/{}=='.format(pnum, ptotal).center(2 * board.N, '=')
-        print puzzle_header
-        print board.display()
+        unsolved_puzzle_str = '\n'.join([puzzle_header, board.display()])
+        print unsolved_puzzle_str
 
         if settings.acp:
             viable, changed_list = board.arc_consistency()
@@ -271,19 +279,20 @@ def solve_puzzles(board_list):
         time_end = time.clock()
         solved = board.solved() if board else False
 
-        print solution_header
-        if solved:
-            print board.display()
+        if settings.solver_display_realtime and not settings.solver_display_verbose:
+            os.system('CLS')  # Clear out old console output if realtime is on
+            print unsolved_puzzle_str
 
-        print 'Time:', 1000 * (time_end - time_search_start)
-        print 'Assignments:', assignment_count
-        print 'Solution:', 'Yes' if solved else 'No'
-        print 'Timeout:', 'Yes' if timeout else 'No'
+        solution_str = '\n'.join([solution_header,
+                                  board.display() if solved else 'No Solution Found.',
+                                  'Time: ' + str(1000 * (time_end - time_search_start)),
+                                  'Assignments: ' + str(assignment_count),
+                                  'Solution: ' + ('Yes' if solved else 'No'),
+                                  'Timeout: ' + ('Yes' if timeout else 'No')])
+        print solution_str
 
         if settings.solver_export_solution:
-            original = str(create_board(each))
-            solution = str(board) if solved else 'No Solution Found.'
-            solution_log.append((puzzle_header, original, solution))
+            solution_log.append((unsolved_puzzle_str, solution_str))
 
         if settings.solver_export_raw_data or settings.solver_export_data_summary:
             data_entry = (1000 * time_overall_start, 1000 * time_search_start, 1000 * time_end,
@@ -343,7 +352,11 @@ def run(filename):
                        '\nDegree Heuristic: ' + str(settings.dh) + \
                        '\nLeast Constraining Value: ' + str(settings.lcv) + \
                        '\nArc Consistency Pre-Processing: ' + str(settings.acp) + \
-                       '\nArc Consistency: ' + str(settings.ac)
+                       '\nArc Consistency: ' + str(settings.ac) + \
+                       '\n' + summary_divider + \
+                       '\nDisplay Settings:' + \
+                       '\nRealtime: ' + str(settings.solver_display_realtime) + \
+                       '\nVerbose: ' + str(settings.solver_display_verbose)
 
         data_summary_str = '\n'.join((summary_header, summary_divider,
                                       total_time, init_time, search_time,

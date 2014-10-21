@@ -8,19 +8,19 @@
 # acp - Arc Consistency Pre-processing
 # ac - Arc Consistency (Note: setting is currently not implemented and has no effect)
 # time_limit - Timeout limit in seconds for backtracking search (Zero designates unlimited time)
-fc = False
-mrv = False
+fc = True
+mrv = True
 dh = False
 lcv = False
-acp = False
+acp = True
 ac = False
 time_limit = 60
 
 ##### Console Display Settings #####
-# solver_display_realtime - displays a real-time visualization of backtracking search
+# solver_display_realtime - animates backtracking search in real-time
 # solver_display_verbose - prints out LOTS of information while backtracking, use for debugging
 #       Note: This setting overrides solver_display_realtime
-solver_display_realtime = False
+solver_display_realtime = True
 solver_display_verbose = False
 
 ##### Solver Log Output Settings #####

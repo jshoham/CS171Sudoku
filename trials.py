@@ -1,24 +1,23 @@
+__author__ = 'jshoham'
+
 import solver
 import generator
 from src import rw
 from src import settings
 
 
-def f(m_list):
-    """Return a list of filenames based on the given m list"""
-    return ['trials/gen_n9_m{:02d}_1000.txt'.format(m) for m in m_list]
+def f(n, m, how_many):
+    return 'trials2/gen_n{}_m{:02d}_{}.txt'.format(n, m, how_many)
 
 
-def g(m_list):
+def gen(m_list, n, p, q, how_many):
     """Output a set of files containing generated puzzles.
     The output file names will conform to the following spec:
     "trials/gen_n9_m{M_VALUE}_{HOW_MANY}.txt"
     eg, "trials/gen_n9_m20_1000.txt" will contain 1000 puzzles where m = 20
     """
-    n, p, q = 9, 3, 3
-    how_many = 1000
     for m in m_list:
-        filename = 'trials/gen_n9_m{:02d}_{}.txt'.format(m, how_many)
+        filename = f(n, m, how_many)
         board_list = set(generator.g.generate_boards(n, p, q, m, how_many))
         board_str = '\n'.join(str(board) for board in board_list)
 
@@ -37,33 +36,95 @@ def g(m_list):
 
 
 def trial_1(file_list):
-    """For the first trial we will solve the following puzzles using backtracking ONLY"""
+    """BT only"""
     settings.fc = False
     settings.mrv = False
     settings.dh = False
     settings.lcv = False
     settings.acp = False
     settings.ac = False
+    settings.solver_display_realtime = False
+    settings.solver_display_verbose = False
 
     for each in file_list:
         solver.s.run(each)
 
 
 def trial_2(file_list):
-    """For the second trial we will solve the following puzzles using backtrack + forward checking"""
+    """BT+FC"""
     settings.fc = True
     settings.mrv = False
     settings.dh = False
     settings.lcv = False
     settings.acp = False
     settings.ac = False
+    settings.solver_display_realtime = False
+    settings.solver_display_verbose = False
+
+    for each in file_list:
+        solver.s.run(each)
+
+
+def trial_3(file_list):
+    """BT+FC+MRV"""
+    settings.fc = True
+    settings.mrv = True
+    settings.dh = False
+    settings.lcv = False
+    settings.acp = False
+    settings.ac = False
+    settings.solver_display_realtime = False
+    settings.solver_display_verbose = False
+
+    for each in file_list:
+        solver.s.run(each)
+
+def trial_4(file_list):
+    """BT+FC+MRV+DH"""
+    settings.fc = True
+    settings.mrv = True
+    settings.dh = True
+    settings.lcv = False
+    settings.acp = False
+    settings.ac = False
+    settings.solver_display_realtime = False
+    settings.solver_display_verbose = False
+
+    for each in file_list:
+        solver.s.run(each)
+
+def trial_5(file_list):
+    """BT+FC+MRV+DH+LCV"""
+    settings.fc = True
+    settings.mrv = True
+    settings.dh = True
+    settings.lcv = True
+    settings.acp = False
+    settings.ac = False
+    settings.solver_display_realtime = False
+    settings.solver_display_verbose = False
+
+    for each in file_list:
+        solver.s.run(each)
+
+def trial_6(file_list):
+    """BT+FC+MRV+DH+LCV+ACP"""
+    settings.fc = True
+    settings.mrv = True
+    settings.dh = True
+    settings.lcv = True
+    settings.acp = True
+    settings.ac = False
+    settings.solver_display_realtime = False
+    settings.solver_display_verbose = False
 
     for each in file_list:
         solver.s.run(each)
 
 
 if __name__ == '__main__':
-    m_list = xrange(5, 30)
-    f_list = f(m_list)
-    trial_1(f_list)
-    trial_2(f_list)
+    m_list = range(5,35) + range(35, 61, 5)
+    file_list = [f(9, m, 100) for m in m_list]
+    #gen(m_list, 9, 3, 3, 100)
+
+    trial_1(file_list)

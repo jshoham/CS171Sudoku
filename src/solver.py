@@ -1,3 +1,5 @@
+__author__ = 'jshoham'
+
 # Solver
 # The solver will expect one filename argument.
 # The first line of that file will be the parameters N, p, and q, separated by spaces.
@@ -144,16 +146,34 @@ def choose_cell_dh(board, cell_list):
 
 
 def order_possible_values(board, x, y):
-    """Returns a list of possible tokens at (x, y) sorted in increasing order."""
+    """Returns the ordered domain of a given cell at (x, y)."""
     if settings.lcv:
         return order_values_lcv(board, x, y)
     else:
         return sorted(board.possible_values(x, y))
 
 
-# todo implement
+# todo implement and test
 def order_values_lcv(board, x, y):
-    return []
+    """Order domain values based on the least constraining value.
+    The least constraining value deletes the fewest values from peer domains."""
+
+    # lcv takes a value argument and computes its 'lcv' value, ie, how many values it would delete from peers
+    lcv = lambda value: len([peer for peer in board.peers(x, y)
+                             if board.cell_empty(*peer) and
+                             value in board.possible_values(*peer)])
+    return sorted(board.possible_values(x, y), key=lcv)
+
+
+# Alternate implementation. This one doesn't use a list comprehension for lcv so it might be faster (less mem alloc?)
+def order_values_lcv2(board, x, y):
+    def lcv(value):
+        lcv_value = 0
+        for peer in board.peers(x, y):
+            if board.cell_empty(*peer) and value in board.possible_values(*peer):
+                lcv_value += 1
+        return lcv_value
+    return sorted(board.possible_values(x, y,), key=lcv)
 
 
 def infer(board, x, y, value):
@@ -302,14 +322,20 @@ def solve_puzzles(board_list):
     return
 
 
-def run(filename):
+
+def main(*args):
+    if len(args) != 1:
+        print "solver.py requires exactly 1 argument ({} given).".format(len(args))
+        exit(-1)
+
+    input_filepath = args[0]
     global raw_data_log
     global solution_log
 
     raw_data_log = [('time_overall_start', 'time_search_start', 'time_end', 'assignments', 'solution', 'timeout')]
     solution_log = []
 
-    f_str = rw.read_file(filename)
+    f_str = rw.read_file(input_filepath)
     if not verifier.valid_puzzles(f_str):
         print 'Input file does not contain puzzle(s) in a valid format.'
         exit(-1)
@@ -317,23 +343,22 @@ def run(filename):
 
     solve_puzzles(puzzles)
 
-    filename_parts = filename.split('.')
-    base = filename_parts[0]
-    ext = '.'.join(filename_parts[1:])  # This looks strange but it ensures that weird filenames with multiple dots
-                                        # will work as expected, like 'example.abc.de.txt'
+    root, ext = os.path.splitext(input_filepath)
 
     if settings.solver_export_solution:
-        solution_filename = base + '_solution.' + ext
+        solution_file_path = root + '_solution.' + ext
         solution_str = '\n'.join('\n'.join(entry) for entry in solution_log)
-        rw.write_file(solution_filename, solution_str)
+        rw.write_file(solution_file_path, solution_str)
 
     if settings.solver_export_raw_data:
-        data_filename = base + '_raw_data.' + ext
-        data_str = '\n'.join('\t'.join(str(item) for item in entry) for entry in raw_data_log)
-        rw.write_file(data_filename, data_str)
+        data_file_path = root + '_raw_data.' + ext
+        str_data_log = [[str(item) for item in entry] for entry in raw_data_log]
+        str_data_log = rw.adjust_col_widths(str_data_log)
+        data_str = '\n'.join('\t'.join(entry) for entry in str_data_log)
+        rw.write_file(data_file_path, data_str)
 
     if settings.solver_export_data_summary:
-        data_summary_filename = base + '_data_summary.' + ext
+        data_summary_file_path = root + '_data_summary.' + ext
         summary_header = 'Average Data for {} Puzzles'.format(len(raw_data_log) - 1)
         summary_divider = '-' * len(summary_header)
 
@@ -362,16 +387,8 @@ def run(filename):
                                       total_time, init_time, search_time,
                                       assignments, solutions, timeouts,
                                       summary_divider, settings_str))
-        rw.write_file(data_summary_filename, data_summary_str)
-
-
-def main(argv):
-    if len(argv) != 2:
-        print "solver.py requires exactly 1 argument ({} given).".format(len(argv) - 1)
-        exit(-1)
-    input_filename = argv[1]
-    run(input_filename)
+        rw.write_file(data_summary_file_path, data_summary_str)
 
 
 if __name__ == '__main__':
-    main(sys.argv)
+    main(*sys.argv[1:])

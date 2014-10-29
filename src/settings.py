@@ -1,18 +1,20 @@
-# User Changeable Settings
+####################################
+##### User Changeable Settings #####
+####################################
 
 ##### Backtracking Settings #####
 # fc - Forward Checking
 # mrv - Minimum Remaining Values
 # dh - Degree Heuristic
-# lcv - Least Constraining Value (Note: setting is currently not implemented and has no effect)
+# lcv - Least Constraining Value
 # acp - Arc Consistency Pre-processing
 # ac - Arc Consistency (Note: setting is currently not implemented and has no effect)
 # time_limit - Timeout limit in seconds for backtracking search (Zero designates unlimited time)
-fc = True
-mrv = True
+fc = False
+mrv = False
 dh = False
-lcv = False
-acp = True
+lcv = True
+acp = False
 ac = False
 time_limit = 60
 
@@ -20,7 +22,7 @@ time_limit = 60
 # solver_display_realtime - animates backtracking search in real-time
 # solver_display_verbose - prints out LOTS of information while backtracking, use for debugging
 #       Note: This setting overrides solver_display_realtime
-solver_display_realtime = True
+solver_display_realtime = False
 solver_display_verbose = False
 
 ##### Solver Log Output Settings #####

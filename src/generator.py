@@ -70,8 +70,6 @@ def main(*args):
 
     print('Reading input file "{}"...'.format(input_filepath))
     f_str = rw.read_file(input_filepath)
-    if not f_str:
-        return
     if not verifier.gen_input(f_str):
         print 'Input file does not meet the required format: "N p q M"'
         return

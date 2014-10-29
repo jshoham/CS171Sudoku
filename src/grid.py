@@ -3,27 +3,21 @@ class Grid(object):
         self.N = N  # The number of tokens
         self.p = p  # The number of rows per block
         self.q = q  # The number of columns per block
-        self.grid = [[Cell(N) for i in xrange(N)] for j in xrange(N)]
+        self.grid = [[Cell(N) for col in xrange(N)] for row in xrange(N)]
 
     def __str__(self):
-        param_list = [str(self.N), str(self.p), str(self.q)]
-        row_list = [' '.join(param_list)]
-
-        for row in xrange(self.N):
-            cell_list = []
-            for col in xrange(self.N):
-                cell_list.append(str(self.cell_value(row, col)))
-            row_list.append(' '.join(cell_list))
-        grid_str = '\n'.join(row_list)
-        return grid_str
+        param_list = [' '.join((str(self.N), str(self.p), str(self.q)))]
+        row_list = [' '.join(str(self.cell_value(row, col)) for col in xrange(self.N)) for row in xrange(self.N)]
+        return '\n'.join(param_list + row_list)
 
     def __repr__(self):
         return str(self)
 
     def display(self, highlights=None):
-        """Displays the board in an easy to read format.
+        """Returns a string of the board in an easy to read format.
 
-        :param highlights: Optional, a list of (x, y) tuples representing cells to highlight
+        :param highlights: Optional, a list of (x, y) tuples representing cells to highlight. Highlighted cells show
+        stars in place of their actual values.
         """
         width = len(str(self.N)) + 1
         row_separator = '+'.join(['-' * (width * self.q)] * self.p)
@@ -32,26 +26,22 @@ class Grid(object):
         for row in xrange(self.N):
             if row % self.p == 0 and row != 0:
                 row_list.append(row_separator)
-
             col_list = []
             for col in xrange(self.N):
                 if col % self.q == 0 and col != 0:
                     col_list.append('|')  # column separator
-
                 cell_value = self.grid[row][col].token
                 if highlights is not None and (row, col) in highlights:
                     cell_value = '*'
-                if cell_value == 0:
-                    col_list.append('.'.center(width))
-                else:
-                    col_list.append(str(cell_value).center(width))
+                cell_value = str(cell_value) if cell_value != 0 else '.'
+                col_list.append(cell_value.center(width))
 
             row_list.append(''.join(col_list))
 
         return '\n'.join(row_list)
 
     def display_cell(self, x, y):
-        """Displays detailed information about the cell at (x, y)."""
+        """Displays detailed information about the cell at (x, y). For testing and debugging use."""
         cell = self.grid[x][y]
         print 'Cell {}: token: {}, possible values: {}'.format((x, y), cell.token, self.possible_values(x, y))
 
@@ -109,22 +99,53 @@ class Grid(object):
         upperleft_x = x - x % self.p
         upperleft_y = y - y % self.q
 
-        box_xs = [bxs for bxs in xrange(upperleft_x, upperleft_x + self.p)]
-        box_ys = [bys for bys in xrange(upperleft_y, upperleft_y + self.q)]
+        box_xs = xrange(upperleft_x, upperleft_x + self.p)
+        box_ys = xrange(upperleft_y, upperleft_y + self.q)
 
-        box = [(bxs, bys) for bxs in box_xs for bys in box_ys if (bxs, bys) != (x, y) and
-               self.cell_empty(bxs, bys) and
-               len(self.possible_values(bxs, bys)) > 1]
-        row = [(x, ys) for ys in xrange(0, upperleft_y) if self.cell_empty(x, ys) and
-               len(self.possible_values(x, ys)) > 1] + \
-              [(x, ys) for ys in xrange(upperleft_y + self.q, self.N) if self.cell_empty(x, ys) and
-               len(self.possible_values(x, ys)) > 1]
-        col = [(xs, y) for xs in xrange(0, upperleft_x) if self.cell_empty(xs, y) and
-               len(self.possible_values(xs, y)) > 1] + \
-              [(xs, y) for xs in xrange(upperleft_x + self.p, self.N) if self.cell_empty(xs, y) and
-               len(self.possible_values(xs, y)) > 1]
+        box = [(bxs, bys) for bxs in box_xs for bys in box_ys if self.cell_empty(bxs, bys) and
+               len(self.possible_values(bxs, bys)) > 1 and (bxs, bys) != (x, y)]
+        row = [(x, rys) for rys in xrange(0, upperleft_y) if self.cell_empty(x, rys) and
+               len(self.possible_values(x, rys)) > 1] + \
+              [(x, rys) for rys in xrange(upperleft_y + self.q, self.N) if self.cell_empty(x, rys) and
+               len(self.possible_values(x, rys)) > 1]
+        col = [(cxs, y) for cxs in xrange(0, upperleft_x) if self.cell_empty(cxs, y) and
+               len(self.possible_values(cxs, y)) > 1] + \
+              [(cxs, y) for cxs in xrange(upperleft_x + self.p, self.N) if self.cell_empty(cxs, y) and
+               len(self.possible_values(cxs, y)) > 1]
 
         return len(box + row + col)
+
+    # Alternate implementation. This one doesn't use list comprehensions so it might be faster (less memory allocation?)
+    def degree_heuristic2(self, x, y):
+        upper_left_x = x - x % self.p
+        upper_left_y = y - y % self.q
+
+        degree = 0
+
+        # Count in the box
+        for bxs in xrange(upper_left_x, upper_left_x + self.p):
+            for bys in xrange(upper_left_y, upper_left_y + self.q):
+                if self.cell_empty(bxs, bys) and len(self.possible_values(bxs, bys)) > 1 and (bxs, bys) != (x, y):
+                    degree += 1
+
+        # Count in the row
+        for rys in xrange(0, upper_left_y):
+            if self.cell_empty(x, rys) and len(self.possible_values(x, rys)) > 1:
+                degree += 1
+        for rys in xrange(upper_left_y + self.q, self.N):
+            if self.cell_empty(x, rys) and len(self.possible_values(x, rys)) > 1:
+                degree += 1
+
+        # Count in the column
+        for cxs in xrange(0, upper_left_x):
+            if self.cell_empty(cxs, y) and len(self.possible_values(cxs, y)) > 1:
+                degree += 1
+        for cxs in xrange(upper_left_x + self.p, self.N):
+            if self.cell_empty(cxs, y) and len(self.possible_values(cxs, y)) > 1:
+                degree += 1
+
+        return degree
+
 
     def forward_check(self, x, y, value):
         """Removes value as a possible value from all the peers of cell (x, y).
@@ -160,15 +181,15 @@ class Grid(object):
             """
             revised = False
             del_list = []
-            for value in board.possible_values(*cell_i):
+            for i_value in board.possible_values(*cell_i):
                 domain_j = board.possible_values(*cell_j)
-                if board.cell_value(*cell_j) == value or (len(domain_j) == 1 and value in domain_j):
-                    del_list.append(value)
+                if board.cell_value(*cell_j) == i_value or (len(domain_j) == 1 and i_value in domain_j):
+                    del_list.append(i_value)
                     revised = True
             # We have to do all the eliminations here since we cannot edit the possible_values set
             # while iterating over it. This is a property of the set built-in type in Python.
-            for value in del_list:
-                board.eliminate(cell_i[0], cell_i[1], value)
+            for i_value in del_list:
+                board.eliminate(cell_i[0], cell_i[1], i_value)
 
             changed_record = (cell_i, del_list)
             return revised, changed_record
@@ -208,12 +229,12 @@ class Grid(object):
         upperleft_x = x - x % self.p
         upperleft_y = y - y % self.q
 
-        box_xs = [xs for xs in xrange(upperleft_x, upperleft_x + self.p)]
-        box_ys = [ys for ys in xrange(upperleft_y, upperleft_y + self.q)]
+        box_xs = xrange(upperleft_x, upperleft_x + self.p)
+        box_ys = xrange(upperleft_y, upperleft_y + self.q)
 
-        box = [(xs, ys) for xs in box_xs for ys in box_ys if (xs, ys) != (x, y)]
-        row = [(x, ys) for ys in xrange(0, upperleft_y)] + [(x, ys) for ys in xrange(upperleft_y + self.q, self.N)]
-        col = [(xs, y) for xs in xrange(0, upperleft_x)] + [(xs, y) for xs in xrange(upperleft_x + self.p, self.N)]
+        box = [(bxs, bys) for bxs in box_xs for bys in box_ys if (bxs, bys) != (x, y)]
+        row = [(x, rys) for rys in xrange(0, upperleft_y)] + [(x, rys) for rys in xrange(upperleft_y + self.q, self.N)]
+        col = [(cxs, y) for cxs in xrange(0, upperleft_x)] + [(cxs, y) for cxs in xrange(upperleft_x + self.p, self.N)]
 
         return box + row + col
 

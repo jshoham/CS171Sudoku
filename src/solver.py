@@ -363,19 +363,19 @@ def main(*args):
     root, ext = os.path.splitext(input_filepath)
 
     if settings.solver_export_solution:
-        solution_file_path = root + '_solution.' + ext
+        solution_file_path = root + '_solution' + ext
         solution_str = '\n'.join('\n'.join(entry) for entry in solution_log)
         rw.write_file(solution_file_path, solution_str)
 
     if settings.solver_export_raw_data:
-        data_file_path = root + '_raw_data.' + ext
+        data_file_path = root + '_raw_data' + ext
         str_data_log = [[str(item) for item in entry] for entry in raw_data_log]
         str_data_log = rw.adjust_col_widths(str_data_log)
         data_str = '\n'.join('\t'.join(entry) for entry in str_data_log)
         rw.write_file(data_file_path, data_str)
 
     if settings.solver_export_data_summary:
-        data_summary_file_path = root + '_data_summary.' + ext
+        data_summary_file_path = root + '_data_summary' + ext
         summary_header = 'Average Data for {} Puzzles'.format(len(raw_data_log) - 1)
         summary_divider = '-' * len(summary_header)
 

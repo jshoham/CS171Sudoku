@@ -64,15 +64,17 @@ def generate_boards(N, p, q, M, quantity):
 def main(*args):
     if len(args) != 2:
         print('Incorrect usage: generator requires exactly 2 arguments ({} given).'.format(len(args)))
-        exit(-1)
+        return
 
     input_filepath, output_filepath = args[0:2]
 
     print('Reading input file "{}"...'.format(input_filepath))
     f_str = rw.read_file(input_filepath)
+    if not f_str:
+        return
     if not verifier.gen_input(f_str):
         print 'Input file does not meet the required format: "N p q M"'
-        exit(-1)
+        return
 
     print('Done. Generating board(s)...')
     N, p, q, M = [int(x) for x in f_str.split()]
@@ -80,12 +82,12 @@ def main(*args):
 
     if not board_list:
         print 'Finished. No output generated.'
-        exit(0)
+        return
 
     print 'Writing output to file "{}"...'.format(output_filepath)
     rw.write_file(output_filepath, '\n'.join(str(board) for board in board_list))
     print 'Finished.'
-    if settings.gen_how_many == 1:
+    if settings.gen_how_many == 1 and board_list[0]:
         print board_list[0].display()
 
 

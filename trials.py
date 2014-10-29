@@ -134,4 +134,4 @@ if __name__ == '__main__':
     # gen_puzzles(9, 3, 3, m_list_, 100)
 
 
-    trial_5(file_list_)
+    trial_4(file_list_)

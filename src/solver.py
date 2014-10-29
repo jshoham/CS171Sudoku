@@ -300,11 +300,18 @@ def solve_puzzles(board_list):
         unsolved_puzzle_str = '\n'.join([puzzle_header, board.display()])
         print unsolved_puzzle_str
 
+        # ACP and FCP toss their 2nd return values (changed_list) because as pre-processes, there is no reason
+        # to undo anything and therefore no reason to keep the changed_lists
         if settings.acp:
-            viable, changed_list = board.arc_consistency()
+            viable *= board.arc_consistency()[0]
+        if settings.fcp:
+            for row in xrange(board.N):
+                for col in xrange(board.N):
+                    if board.cell_filled(row, col):
+                        viable *= board.forward_check(row, col, board.cell_value(row, col))[0]
 
         time_search_start = time.clock()
-        if viable:  # Skip attempting to solve if ACP finds the board not viable
+        if viable:  # Skip attempting to solve if ACP or FCP finds the board not viable
             board = solve(board, time_search_start)
         time_end = time.clock()
         solved = board.solved() if board else False

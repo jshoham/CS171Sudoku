@@ -8,7 +8,8 @@
 # dh - Degree Heuristic
 # lcv - Least Constraining Value
 # acp - Arc Consistency Pre-processing
-# ac - Arc Consistency (Note: setting is currently not implemented and has no effect)
+# ac - Arc Consistency
+# fcp - Forward Checking Pre-processing (Extra feature: Not mentioned in project description)
 # time_limit - Timeout limit in seconds for backtracking search (Zero designates unlimited time)
 fc = False
 mrv = False
@@ -16,6 +17,7 @@ dh = False
 lcv = True
 acp = False
 ac = False
+fcp = False
 time_limit = 60
 
 ##### Console Display Settings #####

@@ -1,3 +1,5 @@
+__author__ = 'jshoham'
+
 class Grid(object):
     def __init__(self, N=9, p=3, q=3):
         self.N = N  # The number of tokens

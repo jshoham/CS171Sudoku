@@ -177,14 +177,24 @@ def order_values_lcv2(board, x, y):
 
 
 def infer(board, x, y, value):
+    viable = True
+    changed_list = []
     if settings.fc:
-        return board.forward_check(x, y, value)
-    else:
-        return True, True
+        fc_viable, fc_changed_list = board.forward_check(x, y, value)
+        changed_list += fc_changed_list
+        if not fc_viable:
+            return fc_viable, changed_list
+    if settings.ac:
+        ac_viable, ac_changed_list = board.arc_consistency()
+        changed_list += ac_changed_list
+        if not ac_viable:
+            return ac_viable, changed_list
+
+    return viable, changed_list
 
 
 def undo_infer(board, x, y, value, changed_list):
-    if settings.fc:
+    if settings.fc or settings.ac:
         board.undo_changes(changed_list)
 
 

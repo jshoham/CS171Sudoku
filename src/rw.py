@@ -14,6 +14,7 @@ def read_file(file_path):
     except:
         print "Error: Failed to open file", file_path
         traceback.print_exc()
+        exit(-1)
 
 
 def write_file(file_path, f_str, overwrite_flag=0):
@@ -34,6 +35,7 @@ def write_file(file_path, f_str, overwrite_flag=0):
     except:
         print 'Error: Failed to open output file', file_path
         traceback.print_exc()
+        exit(-1)
 
 
 def adjust_col_widths(table):

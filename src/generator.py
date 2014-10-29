@@ -1,3 +1,5 @@
+__author__ = 'jshoham'
+
 import sys
 from random import sample, randint
 import time
@@ -15,16 +17,17 @@ import settings
 # before the random puzzle was generated successfully, then execute a random restart and
 # try again. Keep trying until success.
 def generate(N, p, q, M, attempt=1, total=1):
-    intro = 'Generating {}/{}'.format(attempt, total) if attempt and total else ''
+    intro = 'Generating {}/{}'.format(attempt, total)
     sys.stdout.write(intro)
     time_start = time.clock()
     restart_count = 0
     filled = 0
     board = Grid(N, p, q)
     while filled < M:
+        # Check timeout condition
         elapsed_time = time.clock() - time_start
         if elapsed_time >= settings.gen_time_limit and settings.gen_time_limit != 0:
-            sys.stdout.write('Timed out. Consider using a lower M value.\n')
+            sys.stdout.write(' Timed out. Consider using a lower M value.\n')
             return None
 
         # Choose a random cell to try
@@ -42,7 +45,7 @@ def generate(N, p, q, M, attempt=1, total=1):
                     filled += 1
             else:
                 restart_count += 1
-                sys.stdout.write('\r{}: restarting.. (x{}) '.format(intro, restart_count))
+                sys.stdout.write('\r{}: restarting.. (x{})'.format(intro, restart_count))
                 board.reset()
                 filled = 0
                 break
@@ -58,15 +61,15 @@ def generate_boards(N, p, q, M, quantity):
     return board_list
 
 
-def main(argv):
-    if len(argv) != 3:
-        print('Incorrect usage: generator requires exactly 2 arguments ({} given).'.format(len(argv) - 1))
+def main(*args):
+    if len(args) != 2:
+        print('Incorrect usage: generator requires exactly 2 arguments ({} given).'.format(len(args)))
         exit(-1)
 
-    input_filename, output_filename = argv[1:3]
+    input_filepath, output_filepath = args[0:2]
 
-    print('Reading input file "{}"...'.format(input_filename))
-    f_str = rw.read_file(input_filename)
+    print('Reading input file "{}"...'.format(input_filepath))
+    f_str = rw.read_file(input_filepath)
     if not verifier.gen_input(f_str):
         print 'Input file does not meet the required format: "N p q M"'
         exit(-1)
@@ -79,12 +82,12 @@ def main(argv):
         print 'Finished. No output generated.'
         exit(0)
 
-    print 'Writing output to file "{}"...'.format(output_filename)
-    rw.write_file(output_filename, '\n'.join(str(board) for board in board_list))
+    print 'Writing output to file "{}"...'.format(output_filepath)
+    rw.write_file(output_filepath, '\n'.join(str(board) for board in board_list))
     print 'Finished.'
     if settings.gen_how_many == 1:
         print board_list[0].display()
 
 
 if __name__ == "__main__":
-    main(sys.argv)
+    main(*sys.argv[1:])

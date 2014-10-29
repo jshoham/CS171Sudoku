@@ -1,6 +1,8 @@
+__author__ = 'jshoham'
+
 import sys
-from src import generator as g
+from src import generator as gen
 
 
 if __name__ == "__main__":
-    g.main(sys.argv)
+    gen.main(*sys.argv[1:])

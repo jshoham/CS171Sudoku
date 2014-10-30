@@ -245,7 +245,7 @@ class Grid(object):
         try:
             return self.all_peers[x, y]
         except KeyError:
-            self.all_peers[x, y] = _peers(x, y)
+            self.all_peers[x, y] = self._peers(x, y)
             return self.all_peers[x, y]
 
     def violates_constraints(self, x, y, value):

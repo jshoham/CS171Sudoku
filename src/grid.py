@@ -6,6 +6,23 @@ class Grid(object):
         self.p = p  # The number of rows per block
         self.q = q  # The number of columns per block
         self.grid = [[Cell(N) for col in xrange(N)] for row in xrange(N)]
+        self.all_peers = {}
+
+    def _peers(self, x, y):
+        """Returns a list of all the peer cells of the given cell, in the form (x, y)."""
+
+        # upperleft_x and upperleft_y designate the upper left corner of the peer box
+        upperleft_x = x - x % self.p
+        upperleft_y = y - y % self.q
+
+        box_xs = xrange(upperleft_x, upperleft_x + self.p)
+        box_ys = xrange(upperleft_y, upperleft_y + self.q)
+
+        box = [(bxs, bys) for bxs in box_xs for bys in box_ys if (bxs, bys) != (x, y)]
+        row = [(x, rys) for rys in xrange(0, upperleft_y)] + [(x, rys) for rys in xrange(upperleft_y + self.q, self.N)]
+        col = [(cxs, y) for cxs in xrange(0, upperleft_x)] + [(cxs, y) for cxs in xrange(upperleft_x + self.p, self.N)]
+
+        return box + row + col
 
     def __str__(self):
         param_list = [' '.join((str(self.N), str(self.p), str(self.q)))]
@@ -225,20 +242,11 @@ class Grid(object):
         return [(row, col) for row in xrange(self.N) for col in xrange(self.N) if self.cell_empty(row, col)]
 
     def peers(self, x, y):
-        """Returns a list of all the peer cells of the given cell, in the form (x, y)."""
-
-        # upperleft_x and upperleft_y designate the upper left corner of the peer box
-        upperleft_x = x - x % self.p
-        upperleft_y = y - y % self.q
-
-        box_xs = xrange(upperleft_x, upperleft_x + self.p)
-        box_ys = xrange(upperleft_y, upperleft_y + self.q)
-
-        box = [(bxs, bys) for bxs in box_xs for bys in box_ys if (bxs, bys) != (x, y)]
-        row = [(x, rys) for rys in xrange(0, upperleft_y)] + [(x, rys) for rys in xrange(upperleft_y + self.q, self.N)]
-        col = [(cxs, y) for cxs in xrange(0, upperleft_x)] + [(cxs, y) for cxs in xrange(upperleft_x + self.p, self.N)]
-
-        return box + row + col
+        try:
+            return self.all_peers[x, y]
+        except KeyError:
+            self.all_peers[x, y] = _peers(x, y)
+            return self.all_peers[x, y]
 
     def violates_constraints(self, x, y, value):
         """Checks if assigning value to the cell at (x, y) violates a row/column/box constraint."""

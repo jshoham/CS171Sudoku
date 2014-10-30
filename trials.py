@@ -128,10 +128,31 @@ def trial_6(file_list):
         solver.s.main(each)
 
 
+def trial_7(file_list):
+    """BT+FC+MRV+DH+LCV+ACP"""
+    settings.fc = True
+    settings.mrv = True
+    settings.dh = True
+    settings.lcv = True
+    settings.acp = True
+    settings.ac = True
+    settings.solver_display_realtime = False
+    settings.solver_display_verbose = False
+
+    for each in file_list:
+        solver.s.main(each)
+
+
 if __name__ == '__main__':
     m_list_ = range(5, 35) + range(35, 61, 5)
     file_list_ = [f(9, m_, 100) for m_ in m_list_]
     # gen_puzzles(9, 3, 3, m_list_, 100)
 
 
-    trial_4(file_list_)
+    trial_1(file_list_)
+    trial_2(file_list_)
+    trial_3(file_list_)
+    # trial_4(file_list_)
+    trial_5(file_list_)
+    trial_6(file_list_)
+    trial_7(file_list_)

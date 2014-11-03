@@ -1,6 +1,6 @@
 __author__ = 'jshoham'
 
-from src import process_results
+import process_results
 
 if __name__ == '__main__':
     n = 10

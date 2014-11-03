@@ -7,10 +7,9 @@ import generator
 from src import rw
 from src import settings
 
-DIRECTORY = ''
 
-def f(n, m, how_many):
-    return '{}/gen_n{}_m{:02d}_{}.txt'.format(DIRECTORY, n, m, how_many)
+def f(dir, n, m, how_many):
+    return '{}/gen_n{}_m{:02d}_{}.txt'.format(dir, n, m, how_many)
 
 
 def gen_puzzles(n, p, q, m_list, how_many):
@@ -159,15 +158,14 @@ def trial_8(file_list):
 
 
 if __name__ == '__main__':
-    global DIRECTORY
     count = 100
     n = 12
     p = 3
     q = 4
-    DIRECTORY = 'trials n{} 100'.format(n)
+    dir_ = 'trials n{} 100'.format(n)
 
     m_list_ = range(5, 80) + range(80, 96, 5)
-    file_list_ = [f(n, m_, count) for m_ in m_list_]
+    file_list_ = [f(dir_, n, m_, count) for m_ in m_list_]
     # gen_puzzles(n, p, q, m_list_, count)
 
 

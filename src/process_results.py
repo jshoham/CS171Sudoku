@@ -75,6 +75,8 @@ def main(*args):
 
     glob_pattern = args[0]
     files = glob.glob(glob_pattern)
+    if not files:
+        return
     directory = os.path.split(os.path.commonprefix(files))[0]  # The lowest common directory
 
     column_headers = [['m_value', 'total_time', 'init_time', 'search_time',

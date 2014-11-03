@@ -4,5 +4,9 @@ import sys
 from src import generator as gen
 
 
+def main(*args):
+    gen.main(*args)
+
+
 if __name__ == "__main__":
-    gen.main(*sys.argv[1:])
+    main(*sys.argv[1:])

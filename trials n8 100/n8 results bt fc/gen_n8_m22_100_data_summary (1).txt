@@ -1,0 +1,20 @@
+Average Data for 100 Puzzles
+----------------------------
+Total Time:          499.01
+Initialization Time: 2.48
+Search Time:         496.53
+Assignments:         6522.45
+Solution Frequency:  0.080
+Timeout Frequency:   0.000
+----------------------------
+Settings:
+Forward Checking: True
+Minimum Remaining Values: False
+Degree Heuristic: False
+Least Constraining Value: False
+Arc Consistency Pre-Processing: False
+Arc Consistency: False
+----------------------------
+Display Settings:
+Realtime: False
+Verbose: False

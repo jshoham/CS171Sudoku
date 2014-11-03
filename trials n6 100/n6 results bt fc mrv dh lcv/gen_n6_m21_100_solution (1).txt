@@ -1,0 +1,1406 @@
+==Puzzle 1/100==
+. . |. 6 |4 2 
+. 2 |3 1 |. 6 
+3 6 |. 4 |1 . 
+----+----+----
+1 . |5 . |2 . 
+6 3 |. . |. 5 
+4 . |2 3 |6 . 
+==Solution 1/100==
+No Solution Found.
+Time: 1.02499413413
+Assignments: 2
+Solution: No
+Timeout: No
+==Puzzle 2/100==
+. 4 |. . |. 3 
+2 3 |4 5 |1 . 
+. . |6 2 |4 5 
+----+----+----
+3 5 |. . |. 4 
+4 . |2 . |. 1 
+1 6 |. 3 |2 . 
+==Solution 2/100==
+No Solution Found.
+Time: 1.31294429343
+Assignments: 3
+Solution: No
+Timeout: No
+==Puzzle 3/100==
+. . |. 5 |. . 
+. 5 |6 . |3 2 
+. 2 |3 1 |. 6 
+----+----+----
+4 . |1 . |. 5 
+1 3 |5 . |. 4 
+. 6 |4 2 |1 3 
+==Solution 3/100==
+No Solution Found.
+Time: 2.65510528709
+Assignments: 10
+Solution: No
+Timeout: No
+==Puzzle 4/100==
+. . |5 . |. . 
+5 2 |1 4 |3 . 
+4 . |. 2 |1 . 
+----+----+----
+1 5 |. 3 |. 4 
+3 . |4 . |6 2 
+. 6 |2 . |5 3 
+==Solution 4/100==
+No Solution Found.
+Time: 1.20812561624
+Assignments: 3
+Solution: No
+Timeout: No
+==Puzzle 5/100==
+. 5 |. 3 |. . 
+2 6 |. . |3 . 
+. 3 |6 1 |4 2 
+----+----+----
+4 . |. 2 |1 . 
+. . |3 4 |6 5 
+. 2 |1 6 |. 3 
+==Solution 5/100==
+No Solution Found.
+Time: 1.28914924892
+Assignments: 3
+Solution: No
+Timeout: No
+==Puzzle 6/100==
+. 3 |4 2 |6 . 
+4 6 |. 5 |1 . 
+2 1 |. 6 |3 5 
+----+----+----
+. 4 |. . |. 6 
+3 5 |. . |. 1 
+. 2 |3 1 |. . 
+==Solution 6/100==
+No Solution Found.
+Time: 1.88402536241
+Assignments: 6
+Solution: No
+Timeout: No
+==Puzzle 7/100==
+5 3 |4 1 |2 . 
+6 2 |. . |. 4 
+1 4 |6 . |. . 
+----+----+----
+. 1 |5 . |. 3 
+3 . |1 . |5 2 
+. 6 |2 . |. 1 
+==Solution 7/100==
+No Solution Found.
+Time: 3.74907492994
+Assignments: 21
+Solution: No
+Timeout: No
+==Puzzle 8/100==
+. 5 |1 . |4 . 
+4 6 |3 . |. 5 
+2 1 |. 6 |. 3 
+----+----+----
+. . |6 . |5 4 
+1 4 |. 5 |2 6 
+. . |4 . |1 . 
+==Solution 8/100==
+No Solution Found.
+Time: 1.4632446381
+Assignments: 4
+Solution: No
+Timeout: No
+==Puzzle 9/100==
+. 1 |3 . |. 4 
+. 6 |. 5 |. . 
+5 . |4 2 |6 1 
+----+----+----
+1 5 |. 6 |2 . 
+. 2 |. . |3 6 
+6 3 |1 . |4 . 
+==Solution 9/100==
+No Solution Found.
+Time: 1.63734002729
+Assignments: 3
+Solution: No
+Timeout: No
+==Puzzle 10/100==
+1 . |. 4 |2 5 
+5 4 |1 . |. 3 
+. . |5 3 |1 . 
+----+----+----
+2 . |6 5 |. 4 
+. . |4 . |3 . 
+. 1 |. 2 |5 6 
+==Solution 10/100==
+No Solution Found.
+Time: 2.7879358521
+Assignments: 8
+Solution: No
+Timeout: No
+==Puzzle 11/100==
+. 1 |. 6 |2 5 
+3 5 |. 2 |. 4 
+. . |. 4 |6 1 
+----+----+----
+. 4 |. 3 |. 6 
+. 6 |2 . |5 . 
+5 . |6 1 |. 3 
+==Solution 11/100==
+No Solution Found.
+Time: 2.2322161409
+Assignments: 7
+Solution: No
+Timeout: No
+==Puzzle 12/100==
+. 6 |. 3 |. 5 
+5 . |4 . |2 1 
+3 . |2 . |. 6 
+----+----+----
+. 1 |. 4 |6 3 
+4 3 |5 6 |1 . 
+. . |. 2 |. 4 
+==Solution 12/100==
+No Solution Found.
+Time: 2.1819152239
+Assignments: 7
+Solution: No
+Timeout: No
+==Puzzle 13/100==
+. 5 |6 . |1 . 
+4 2 |. 3 |5 6 
+. 3 |. 5 |. 4 
+----+----+----
+5 1 |. 2 |6 3 
+. . |. . |. 5 
+. 6 |4 1 |. 2 
+==Solution 13/100==
+No Solution Found.
+Time: 2.05902436107
+Assignments: 5
+Solution: No
+Timeout: No
+==Puzzle 14/100==
+. 1 |. 3 |. . 
+. . |4 5 |6 . 
+5 . |2 6 |1 3 
+----+----+----
+4 . |6 . |3 . 
+6 3 |5 1 |4 2 
+. 2 |. . |. 1 
+==Solution 14/100==
+No Solution Found.
+Time: 0.817766404339
+Assignments: 1
+Solution: No
+Timeout: No
+==Puzzle 15/100==
+5 4 |1 . |6 3 
+6 . |. . |2 1 
+2 1 |6 5 |4 . 
+----+----+----
+. 3 |. . |. 6 
+. 5 |. . |1 4 
+. 6 |4 . |. 2 
+==Solution 15/100==
+No Solution Found.
+Time: 4.73039461519
+Assignments: 23
+Solution: No
+Timeout: No
+==Puzzle 16/100==
+4 3 |. . |. . 
+. . |3 6 |2 5 
+. 1 |2 4 |3 6 
+----+----+----
+5 4 |. 3 |. . 
+. . |. 2 |1 3 
+3 . |6 1 |5 . 
+==Solution 16/100==
+No Solution Found.
+Time: 1.08493355003
+Assignments: 3
+Solution: No
+Timeout: No
+==Puzzle 17/100==
+. . |2 . |4 . 
+1 2 |6 3 |. . 
+4 . |1 5 |. 3 
+----+----+----
+2 . |3 4 |1 . 
+. 5 |. 2 |3 6 
+. 3 |. 6 |. 2 
+==Solution 17/100==
+No Solution Found.
+Time: 2.15420453912
+Assignments: 10
+Solution: No
+Timeout: No
+==Puzzle 18/100==
+4 6 |1 3 |5 . 
+5 . |. 4 |6 . 
+2 . |5 6 |. . 
+----+----+----
+. 1 |. . |2 3 
+3 . |2 5 |. 6 
+6 . |4 . |. 1 
+==Solution 18/100==
+No Solution Found.
+Time: 1.91444687516
+Assignments: 8
+Solution: No
+Timeout: No
+==Puzzle 19/100==
+1 2 |3 6 |4 . 
+. 6 |4 5 |2 1 
+. . |1 . |. . 
+----+----+----
+6 4 |. 2 |1 5 
+3 1 |5 . |. . 
+. 5 |. . |. 3 
+==Solution 19/100==
+No Solution Found.
+Time: 2.3222758665
+Assignments: 8
+Solution: No
+Timeout: No
+==Puzzle 20/100==
+. 4 |. 3 |6 2 
+2 5 |6 . |3 . 
+1 . |2 . |4 5 
+----+----+----
+. 2 |3 4 |5 . 
+. 1 |. 6 |. 4 
+. . |. 2 |1 . 
+==Solution 20/100==
+No Solution Found.
+Time: 3.36594459259
+Assignments: 15
+Solution: No
+Timeout: No
+==Puzzle 21/100==
+. . |5 . |. 1 
+. 4 |. . |3 . 
+1 . |. 2 |6 . 
+----+----+----
+. . |3 5 |2 4 
+4 3 |. . |1 6 
+2 6 |1 4 |5 3 
+==Solution 21/100==
+No Solution Found.
+Time: 2.85600775169
+Assignments: 13
+Solution: No
+Timeout: No
+==Puzzle 22/100==
+4 5 |2 6 |3 . 
+. 1 |. 4 |. 6 
+6 3 |. . |5 . 
+----+----+----
+3 . |. 2 |. . 
+5 . |. 1 |2 . 
+1 2 |. 3 |6 4 
+==Solution 22/100==
+No Solution Found.
+Time: 4.50720312142
+Assignments: 20
+Solution: No
+Timeout: No
+==Puzzle 23/100==
+. . |. . |6 . 
+1 5 |4 3 |. 2 
+6 3 |. 1 |4 5 
+----+----+----
+5 1 |6 . |. 3 
+. . |3 . |. 6 
+2 4 |. 5 |1 . 
+==Solution 23/100==
+No Solution Found.
+Time: 1.24667961234
+Assignments: 4
+Solution: No
+Timeout: No
+==Puzzle 24/100==
+3 2 |. 6 |4 . 
+6 1 |. . |. 5 
+. 5 |1 3 |. 6 
+----+----+----
+5 . |2 . |. 1 
+1 6 |4 . |5 3 
+2 4 |. . |. . 
+==Solution 24/100==
+No Solution Found.
+Time: 1.34336580606
+Assignments: 3
+Solution: No
+Timeout: No
+==Puzzle 25/100==
+1 6 |2 . |. . 
+2 5 |3 . |1 . 
+3 4 |1 . |. . 
+----+----+----
+. . |5 . |3 . 
+5 . |4 3 |2 6 
+4 1 |. 2 |5 . 
+==Solution 25/100==
+No Solution Found.
+Time: 2.69124965848
+Assignments: 11
+Solution: No
+Timeout: No
+==Puzzle 26/100==
+1 3 |. 4 |6 . 
+6 4 |2 1 |. . 
+. 5 |. . |2 . 
+----+----+----
+3 . |. 6 |. 5 
+2 6 |5 3 |1 . 
+5 . |. . |3 4 
+==Solution 26/100==
+No Solution Found.
+Time: 1.69155658443
+Assignments: 5
+Solution: No
+Timeout: No
+==Puzzle 27/100==
+. . |. . |6 2 
+1 4 |2 3 |5 . 
+. 6 |5 4 |3 1 
+----+----+----
+. . |4 5 |2 3 
+5 . |. 1 |4 . 
+6 1 |. . |. . 
+==Solution 27/100==
+No Solution Found.
+Time: 1.5129431489
+Assignments: 4
+Solution: No
+Timeout: No
+==Puzzle 28/100==
+. . |6 . |. 3 
+4 6 |. 2 |5 . 
+3 1 |. . |6 . 
+----+----+----
+. 3 |2 5 |4 . 
+. . |4 1 |. 6 
+1 5 |3 6 |. 2 
+==Solution 28/100==
+No Solution Found.
+Time: 2.23733659357
+Assignments: 9
+Solution: No
+Timeout: No
+==Puzzle 29/100==
+. . |6 1 |. 2 
+. 1 |4 . |5 6 
+. 5 |. 3 |. 4 
+----+----+----
+3 4 |1 . |2 5 
+6 2 |5 . |. 3 
+. . |2 . |4 . 
+==Solution 29/100==
+No Solution Found.
+Time: 1.3921607075
+Assignments: 5
+Solution: No
+Timeout: No
+==Puzzle 30/100==
+. 6 |. . |3 . 
+5 2 |1 . |6 . 
+1 . |. 2 |. . 
+----+----+----
+. 5 |3 . |. 1 
+6 4 |. 5 |2 3 
+3 . |2 1 |4 5 
+==Solution 30/100==
+No Solution Found.
+Time: 2.54968420359
+Assignments: 10
+Solution: No
+Timeout: No
+==Puzzle 31/100==
+4 6 |1 . |3 5 
+. . |. 2 |1 . 
+. 1 |3 5 |2 6 
+----+----+----
+6 . |5 . |4 1 
+5 3 |2 4 |. . 
+1 . |. . |. . 
+==Solution 31/100==
+No Solution Found.
+Time: 3.3198605189
+Assignments: 10
+Solution: No
+Timeout: No
+==Puzzle 32/100==
+. . |2 1 |3 6 
+. 6 |. 4 |. 1 
+1 . |3 5 |. 4 
+----+----+----
+. . |4 . |. 3 
+. 2 |1 . |4 5 
+5 1 |. 6 |2 . 
+==Solution 32/100==
+No Solution Found.
+Time: 2.01324149054
+Assignments: 7
+Solution: No
+Timeout: No
+==Puzzle 33/100==
+3 5 |6 . |. 2 
+2 6 |. . |1 . 
+. 1 |3 5 |. . 
+----+----+----
+5 . |. 6 |2 4 
+. 4 |. . |6 1 
+. 2 |5 4 |3 . 
+==Solution 33/100==
+No Solution Found.
+Time: 1.43463034397
+Assignments: 4
+Solution: No
+Timeout: No
+==Puzzle 34/100==
+6 . |. 3 |1 4 
+. 1 |. 4 |3 . 
+3 4 |2 . |6 . 
+----+----+----
+2 5 |3 6 |4 . 
+. 3 |4 5 |. . 
+1 . |. . |. 6 
+==Solution 34/100==
+No Solution Found.
+Time: 2.12227701104
+Assignments: 6
+Solution: No
+Timeout: No
+==Puzzle 35/100==
+1 5 |. . |3 . 
+. . |5 3 |6 2 
+6 2 |. 1 |5 . 
+----+----+----
+. . |3 . |4 5 
+. 4 |6 2 |. . 
+2 3 |4 . |1 . 
+==Solution 35/100==
+No Solution Found.
+Time: 1.20963163158
+Assignments: 4
+Solution: No
+Timeout: No
+==Puzzle 36/100==
+3 . |6 1 |5 . 
+. 5 |. . |3 4 
+. . |. 4 |2 6 
+----+----+----
+5 2 |. 3 |4 1 
+4 . |5 . |. 2 
+1 . |. . |6 3 
+==Solution 36/100==
+No Solution Found.
+Time: 1.23975194117
+Assignments: 4
+Solution: No
+Timeout: No
+==Puzzle 37/100==
+. 2 |. . |. . 
+4 5 |3 2 |1 . 
+6 3 |5 1 |4 2 
+----+----+----
+. . |. . |3 5 
+. . |. . |6 1 
+3 6 |. 5 |2 4 
+==Solution 37/100==
+1 2 |4 6 |5 3 
+4 5 |3 2 |1 6 
+6 3 |5 1 |4 2 
+----+----+----
+2 1 |6 4 |3 5 
+5 4 |2 3 |6 1 
+3 6 |1 5 |2 4 
+Time: 3.55690735512
+Assignments: 18
+Solution: Yes
+Timeout: No
+==Puzzle 38/100==
+2 5 |. 4 |. . 
+. 1 |. 2 |3 . 
+. . |3 1 |. 2 
+----+----+----
+5 4 |2 . |6 3 
+6 3 |4 . |. . 
+1 2 |5 6 |. . 
+==Solution 38/100==
+No Solution Found.
+Time: 3.96202551849
+Assignments: 20
+Solution: No
+Timeout: No
+==Puzzle 39/100==
+3 . |. 4 |. 1 
+1 5 |3 6 |4 . 
+. . |. 2 |3 5 
+----+----+----
+6 . |. 5 |2 3 
+4 3 |. . |6 . 
+. 2 |4 . |5 . 
+==Solution 39/100==
+No Solution Found.
+Time: 1.12921040511
+Assignments: 3
+Solution: No
+Timeout: No
+==Puzzle 40/100==
+5 6 |. 3 |. 4 
+. . |5 6 |. 2 
+. 3 |4 2 |. 5 
+----+----+----
+6 . |1 5 |. . 
+. 4 |3 . |5 . 
+. . |6 4 |2 3 
+==Solution 40/100==
+No Solution Found.
+Time: 1.38643784862
+Assignments: 3
+Solution: No
+Timeout: No
+==Puzzle 41/100==
+3 . |. 6 |. 1 
+1 6 |. 5 |4 . 
+. . |4 . |3 2 
+----+----+----
+. . |3 . |5 6 
+. . |. . |2 3 
+6 3 |5 2 |1 4 
+==Solution 41/100==
+No Solution Found.
+Time: 7.66320915636
+Assignments: 41
+Solution: No
+Timeout: No
+==Puzzle 42/100==
+6 . |. . |. 4 
+5 4 |2 1 |3 6 
+. 1 |. 6 |5 . 
+----+----+----
+. 5 |4 . |1 . 
+. . |3 . |6 2 
+3 . |6 . |4 5 
+==Solution 42/100==
+No Solution Found.
+Time: 1.84245933531
+Assignments: 6
+Solution: No
+Timeout: No
+==Puzzle 43/100==
+. 6 |1 5 |2 3 
+. . |2 . |. 6 
+. 3 |6 4 |5 . 
+----+----+----
+3 2 |4 . |. 1 
+6 . |5 . |. 4 
+. . |. 2 |6 5 
+==Solution 43/100==
+No Solution Found.
+Time: 4.80509298291
+Assignments: 26
+Solution: No
+Timeout: No
+==Puzzle 44/100==
+4 . |. 5 |1 . 
+1 . |. 2 |3 . 
+. 5 |6 3 |. . 
+----+----+----
+3 2 |5 . |6 . 
+. 1 |. 4 |2 5 
+5 . |3 . |4 1 
+==Solution 44/100==
+No Solution Found.
+Time: 2.33703481808
+Assignments: 7
+Solution: No
+Timeout: No
+==Puzzle 45/100==
+. . |. 5 |3 . 
+. 5 |2 1 |. 6 
+3 2 |6 . |4 1 
+----+----+----
+2 4 |1 . |. . 
+. . |. 2 |6 4 
+1 . |5 3 |2 . 
+==Solution 45/100==
+No Solution Found.
+Time: 3.08733172915
+Assignments: 11
+Solution: No
+Timeout: No
+==Puzzle 46/100==
+. . |. 6 |. 5 
+. . |5 . |4 1 
+. 5 |2 4 |3 6 
+----+----+----
+6 2 |. 3 |. . 
+3 . |. 1 |. 2 
+5 1 |4 2 |6 . 
+==Solution 46/100==
+No Solution Found.
+Time: 3.98220612601
+Assignments: 21
+Solution: No
+Timeout: No
+==Puzzle 47/100==
+. . |. 6 |. 3 
+. . |2 . |5 4 
+4 . |5 3 |2 6 
+----+----+----
+5 1 |3 4 |. 2 
+6 . |. 2 |1 . 
+. 4 |. 5 |3 . 
+==Solution 47/100==
+No Solution Found.
+Time: 2.70239417307
+Assignments: 9
+Solution: No
+Timeout: No
+==Puzzle 48/100==
+. 3 |. 2 |5 . 
+2 1 |3 . |4 . 
+4 5 |1 . |. . 
+----+----+----
+6 . |4 1 |3 5 
+5 2 |. . |. 1 
+3 4 |. . |2 . 
+==Solution 48/100==
+No Solution Found.
+Time: 1.20692080372
+Assignments: 1
+Solution: No
+Timeout: No
+==Puzzle 49/100==
+5 1 |2 . |. . 
+6 3 |5 . |1 4 
+. 4 |6 . |. 3 
+----+----+----
+3 6 |. 5 |4 2 
+. 2 |3 . |. . 
+4 . |1 . |5 . 
+==Solution 49/100==
+No Solution Found.
+Time: 3.90389332108
+Assignments: 13
+Solution: No
+Timeout: No
+==Puzzle 50/100==
+. . |. . |. 4 
+2 . |1 5 |. 6 
+4 1 |. 2 |. . 
+----+----+----
+5 2 |4 . |6 3 
+1 6 |. 3 |4 2 
+3 . |. . |5 1 
+==Solution 50/100==
+No Solution Found.
+Time: 1.80179691745
+Assignments: 7
+Solution: No
+Timeout: No
+==Puzzle 51/100==
+1 . |. 3 |. . 
+. 2 |5 1 |. . 
+5 . |4 . |6 3 
+----+----+----
+3 5 |1 2 |. . 
+6 4 |. 5 |3 2 
+. . |3 6 |4 . 
+==Solution 51/100==
+No Solution Found.
+Time: 2.02468720806
+Assignments: 8
+Solution: No
+Timeout: No
+==Puzzle 52/100==
+. 5 |4 6 |2 1 
+. 1 |2 3 |5 4 
+. 6 |5 1 |. 3 
+----+----+----
+. . |. 2 |. 6 
+. 2 |3 4 |. . 
+. . |1 5 |. . 
+==Solution 52/100==
+No Solution Found.
+Time: 12.7743244843
+Assignments: 72
+Solution: No
+Timeout: No
+==Puzzle 53/100==
+. 2 |3 5 |4 . 
+. . |4 1 |2 6 
+1 . |2 6 |. . 
+----+----+----
+6 . |. 3 |. 1 
+2 1 |. . |. 4 
+. . |1 4 |5 2 
+==Solution 53/100==
+No Solution Found.
+Time: 2.55691307791
+Assignments: 10
+Solution: No
+Timeout: No
+==Puzzle 54/100==
+3 . |. . |. 5 
+6 . |4 2 |1 . 
+. 1 |6 . |3 2 
+----+----+----
+. . |1 . |5 . 
+. 3 |5 4 |. 1 
+1 2 |3 . |6 4 
+==Solution 54/100==
+No Solution Found.
+Time: 0.973187201566
+Assignments: 2
+Solution: No
+Timeout: No
+==Puzzle 55/100==
+6 . |1 2 |4 3 
+2 3 |. 4 |5 6 
+. . |. 5 |. . 
+----+----+----
+4 . |5 1 |. 2 
+1 . |6 . |. . 
+5 . |4 3 |. 1 
+==Solution 55/100==
+No Solution Found.
+Time: 1.66595432131
+Assignments: 5
+Solution: No
+Timeout: No
+==Puzzle 56/100==
+2 3 |. . |. . 
+. 5 |6 3 |2 . 
+4 6 |. 2 |3 1 
+----+----+----
+1 . |. 5 |4 . 
+. . |1 . |6 5 
+. 2 |4 6 |1 . 
+==Solution 56/100==
+No Solution Found.
+Time: 2.5177566755
+Assignments: 7
+Solution: No
+Timeout: No
+==Puzzle 57/100==
+3 1 |6 5 |4 . 
+6 . |. . |2 . 
+4 . |2 . |5 3 
+----+----+----
+. 2 |1 . |. . 
+. 4 |3 2 |. 5 
+5 . |. 4 |1 6 
+==Solution 57/100==
+No Solution Found.
+Time: 1.12921040511
+Assignments: 2
+Solution: No
+Timeout: No
+==Puzzle 58/100==
+. . |. . |1 . 
+5 . |4 . |. 2 
+4 . |3 1 |6 5 
+----+----+----
+3 5 |2 . |. 1 
+6 4 |. . |2 . 
+2 1 |6 . |3 4 
+==Solution 58/100==
+No Solution Found.
+Time: 2.25390276387
+Assignments: 6
+Solution: No
+Timeout: No
+==Puzzle 59/100==
+5 6 |. 1 |3 2 
+3 4 |5 . |1 6 
+. . |. 2 |. . 
+----+----+----
+. . |. 6 |. 3 
+2 5 |. . |4 1 
+1 3 |. 5 |2 . 
+==Solution 59/100==
+No Solution Found.
+Time: 3.57738916557
+Assignments: 15
+Solution: No
+Timeout: No
+==Puzzle 60/100==
+. 1 |4 3 |5 . 
+. . |2 . |. 3 
+2 3 |. 5 |4 1 
+----+----+----
+3 2 |6 4 |. . 
+1 . |. . |. 6 
+. 5 |1 . |3 2 
+==Solution 60/100==
+No Solution Found.
+Time: 2.38402250102
+Assignments: 8
+Solution: No
+Timeout: No
+==Puzzle 61/100==
+. 6 |. 1 |5 3 
+1 4 |3 . |6 . 
+5 2 |. 4 |. . 
+----+----+----
+2 1 |6 . |3 4 
+4 . |. 2 |. . 
+3 . |5 . |. 1 
+==Solution 61/100==
+No Solution Found.
+Time: 1.44547365539
+Assignments: 3
+Solution: No
+Timeout: No
+==Puzzle 62/100==
+2 3 |4 . |1 . 
+1 . |. 2 |5 4 
+4 5 |. 3 |. . 
+----+----+----
+. 2 |. . |3 . 
+3 . |5 1 |6 . 
+. 6 |3 4 |. 2 
+==Solution 62/100==
+No Solution Found.
+Time: 1.46264223179
+Assignments: 4
+Solution: No
+Timeout: No
+==Puzzle 63/100==
+3 . |5 2 |4 6 
+. 4 |. 6 |2 1 
+. 6 |. . |. 5 
+----+----+----
+. 3 |6 5 |. 2 
+1 2 |3 4 |. . 
+4 . |2 . |. . 
+==Solution 63/100==
+No Solution Found.
+Time: 9.31681415079
+Assignments: 13
+Solution: No
+Timeout: No
+==Puzzle 64/100==
+6 3 |4 . |. . 
+. . |1 2 |6 3 
+. 2 |. . |5 4 
+----+----+----
+2 4 |6 . |. 5 
+3 1 |. 5 |2 . 
+5 6 |2 . |. . 
+==Solution 64/100==
+No Solution Found.
+Time: 0.581321974437
+Assignments: 0
+Solution: No
+Timeout: No
+==Puzzle 65/100==
+1 2 |. 4 |3 6 
+6 5 |1 . |. 4 
+. 4 |2 3 |. . 
+----+----+----
+. 6 |3 . |. 5 
+. . |6 5 |1 3 
+. . |4 . |2 . 
+==Solution 65/100==
+No Solution Found.
+Time: 5.47707708904
+Assignments: 18
+Solution: No
+Timeout: No
+==Puzzle 66/100==
+. 5 |2 6 |1 3 
+. . |. 1 |. . 
+6 . |4 5 |2 . 
+----+----+----
+3 . |. 2 |6 . 
+5 6 |. . |3 . 
+. 1 |6 3 |5 4 
+==Solution 66/100==
+No Solution Found.
+Time: 3.7517857578
+Assignments: 18
+Solution: No
+Timeout: No
+==Puzzle 67/100==
+4 6 |3 . |2 5 
+. 5 |. 4 |6 3 
+. . |. . |1 . 
+----+----+----
+1 . |. 3 |. . 
+5 . |4 2 |3 6 
+. 4 |6 1 |. 2 
+==Solution 67/100==
+No Solution Found.
+Time: 4.03401305834
+Assignments: 15
+Solution: No
+Timeout: No
+==Puzzle 68/100==
+. . |4 . |. 1 
+. 6 |. 5 |3 . 
+. 2 |3 1 |4 6 
+----+----+----
+. . |6 . |1 3 
+6 . |2 3 |5 4 
+3 . |. 4 |6 . 
+==Solution 68/100==
+No Solution Found.
+Time: 1.78191751309
+Assignments: 5
+Solution: No
+Timeout: No
+==Puzzle 69/100==
+2 . |. . |6 5 
+1 6 |. . |4 3 
+. 5 |3 1 |2 . 
+----+----+----
+4 . |6 5 |3 . 
+. . |. 2 |1 . 
+6 . |. 3 |5 2 
+==Solution 69/100==
+No Solution Found.
+Time: 1.25089645564
+Assignments: 3
+Solution: No
+Timeout: No
+==Puzzle 70/100==
+5 2 |. . |6 1 
+. 6 |1 . |3 4 
+. 3 |. 6 |. 5 
+----+----+----
+2 . |. . |5 . 
+3 4 |6 2 |1 . 
+6 . |3 . |4 . 
+==Solution 70/100==
+No Solution Found.
+Time: 1.71083358259
+Assignments: 7
+Solution: No
+Timeout: No
+==Puzzle 71/100==
+3 . |. 5 |. . 
+. . |. 1 |5 . 
+. . |6 3 |2 1 
+----+----+----
+1 . |3 . |. 4 
+2 5 |. 6 |1 3 
+6 3 |1 2 |. 5 
+==Solution 71/100==
+No Solution Found.
+Time: 5.45689648163
+Assignments: 17
+Solution: No
+Timeout: No
+==Puzzle 72/100==
+2 3 |5 . |. 1 
+. 6 |3 4 |2 . 
+. 5 |1 . |. 3 
+----+----+----
+. . |. . |3 . 
+3 4 |6 2 |5 . 
+. 1 |. 5 |6 2 
+==Solution 72/100==
+No Solution Found.
+Time: 2.39607062485
+Assignments: 8
+Solution: No
+Timeout: No
+==Puzzle 73/100==
+. 6 |. . |5 3 
+1 3 |6 5 |. . 
+5 2 |4 . |6 . 
+----+----+----
+2 . |. . |3 5 
+. . |1 4 |. 2 
+. . |3 6 |4 1 
+==Solution 73/100==
+No Solution Found.
+Time: 3.20690935803
+Assignments: 10
+Solution: No
+Timeout: No
+==Puzzle 74/100==
+. 6 |5 . |. 3 
+. . |. . |5 1 
+. 3 |6 4 |. . 
+----+----+----
+6 1 |4 5 |2 . 
+5 4 |. 3 |6 . 
+3 . |1 6 |4 . 
+==Solution 74/100==
+No Solution Found.
+Time: 1.31595632433
+Assignments: 4
+Solution: No
+Timeout: No
+==Puzzle 75/100==
+. . |1 4 |3 . 
+4 1 |6 5 |. 2 
+. . |. 2 |. . 
+----+----+----
+1 3 |4 6 |. . 
+5 2 |3 . |. 1 
+. 4 |2 1 |. 6 
+==Solution 75/100==
+No Solution Found.
+Time: 7.18791067152
+Assignments: 28
+Solution: No
+Timeout: No
+==Puzzle 76/100==
+5 . |. . |2 . 
+2 . |6 4 |3 . 
+4 . |2 1 |. . 
+----+----+----
+. 4 |3 6 |5 2 
+. 6 |. . |1 3 
+3 . |4 5 |6 . 
+==Solution 76/100==
+No Solution Found.
+Time: 2.34095045846
+Assignments: 8
+Solution: No
+Timeout: No
+==Puzzle 77/100==
+4 . |3 5 |1 2 
+. 3 |1 . |4 5 
+5 . |2 . |. 6 
+----+----+----
+1 5 |. 4 |2 . 
+. 2 |. . |. 1 
+3 . |. 6 |. 4 
+==Solution 77/100==
+No Solution Found.
+Time: 1.63161716853
+Assignments: 4
+Solution: No
+Timeout: No
+==Puzzle 78/100==
+3 5 |. 4 |6 . 
+. . |2 . |. 3 
+. . |3 5 |2 4 
+----+----+----
+5 . |6 3 |1 . 
+1 2 |. . |4 5 
+. 3 |. 2 |. 6 
+==Solution 78/100==
+No Solution Found.
+Time: 3.14546392656
+Assignments: 13
+Solution: No
+Timeout: No
+==Puzzle 79/100==
+5 . |3 4 |2 6 
+. 6 |1 . |4 . 
+1 . |5 . |3 . 
+----+----+----
+2 . |6 3 |1 . 
+6 . |4 1 |5 2 
+. . |2 . |. . 
+==Solution 79/100==
+No Solution Found.
+Time: 4.29545734528
+Assignments: 19
+Solution: No
+Timeout: No
+==Puzzle 80/100==
+. 3 |. 5 |. 4 
+1 5 |3 . |. . 
+4 6 |. . |. 1 
+----+----+----
+2 . |5 6 |3 . 
+. . |1 . |. 6 
+6 1 |2 3 |4 5 
+==Solution 80/100==
+No Solution Found.
+Time: 1.15812590229
+Assignments: 3
+Solution: No
+Timeout: No
+==Puzzle 81/100==
+. 5 |2 1 |3 4 
+. 6 |. . |5 . 
+2 4 |. . |1 . 
+----+----+----
+5 . |4 6 |. . 
+4 3 |1 2 |. 5 
+1 . |3 . |. 2 
+==Solution 81/100==
+No Solution Found.
+Time: 1.06143970856
+Assignments: 2
+Solution: No
+Timeout: No
+==Puzzle 82/100==
+. 1 |5 . |. 3 
+6 5 |. 2 |. 1 
+. 4 |. . |2 6 
+----+----+----
+5 . |1 6 |. 4 
+1 2 |3 . |. 5 
+4 6 |. . |1 . 
+==Solution 82/100==
+No Solution Found.
+Time: 1.22770381734
+Assignments: 3
+Solution: No
+Timeout: No
+==Puzzle 83/100==
+5 . |1 3 |6 2 
+2 3 |. 4 |5 . 
+. 6 |. . |. 4 
+----+----+----
+6 . |. 5 |2 . 
+. 4 |6 2 |3 . 
+. 5 |4 . |. 6 
+==Solution 83/100==
+No Solution Found.
+Time: 1.17981252515
+Assignments: 3
+Solution: No
+Timeout: No
+==Puzzle 84/100==
+1 . |4 . |. 2 
+3 . |. 5 |. . 
+4 2 |. 6 |1 . 
+----+----+----
+. . |5 . |2 3 
+6 . |2 . |4 . 
+2 4 |6 3 |5 1 
+==Solution 84/100==
+No Solution Found.
+Time: 0.493069467439
+Assignments: 0
+Solution: No
+Timeout: No
+==Puzzle 85/100==
+. 4 |6 . |3 . 
+6 2 |. 3 |. . 
+3 1 |5 2 |6 . 
+----+----+----
+4 6 |3 . |. 5 
+. . |. 6 |. 3 
+5 . |1 . |2 6 
+==Solution 85/100==
+No Solution Found.
+Time: 3.30931841052
+Assignments: 16
+Solution: No
+Timeout: No
+==Puzzle 86/100==
+. 4 |3 5 |2 . 
+5 1 |4 2 |3 6 
+6 . |. 1 |. . 
+----+----+----
+1 . |6 3 |. . 
+4 . |. . |. 1 
+. 2 |1 4 |5 . 
+==Solution 86/100==
+No Solution Found.
+Time: 1.1090297977
+Assignments: 2
+Solution: No
+Timeout: No
+==Puzzle 87/100==
+. 6 |5 1 |. 3 
+. 3 |2 . |4 5 
+. 2 |3 . |1 . 
+----+----+----
+. 1 |4 2 |5 . 
+2 5 |. . |6 4 
+3 . |. 5 |. . 
+==Solution 87/100==
+No Solution Found.
+Time: 2.86594745398
+Assignments: 13
+Solution: No
+Timeout: No
+==Puzzle 88/100==
+. 4 |3 2 |6 . 
+1 . |. 5 |3 4 
+. . |. 6 |2 1 
+----+----+----
+. 2 |1 3 |. . 
+5 . |6 4 |1 . 
+. . |2 . |4 3 
+==Solution 88/100==
+No Solution Found.
+Time: 1.18433057162
+Assignments: 2
+Solution: No
+Timeout: No
+==Puzzle 89/100==
+4 . |. 5 |. . 
+. 5 |. 1 |2 6 
+6 2 |3 4 |5 1 
+----+----+----
+. . |5 6 |. . 
+1 6 |. 2 |. 4 
+5 . |4 . |. 2 
+==Solution 89/100==
+No Solution Found.
+Time: 1.46384704431
+Assignments: 5
+Solution: No
+Timeout: No
+==Puzzle 90/100==
+. 6 |. . |. . 
+. . |4 1 |6 . 
+. 1 |6 2 |4 5 
+----+----+----
+. . |3 6 |2 . 
+. 2 |1 5 |3 4 
+4 3 |. . |1 6 
+==Solution 90/100==
+No Solution Found.
+Time: 3.33702909529
+Assignments: 15
+Solution: No
+Timeout: No
+==Puzzle 91/100==
+. . |. 2 |. 4 
+6 1 |5 4 |. 3 
+. . |. . |5 1 
+----+----+----
+. . |4 . |. 5 
+1 5 |3 6 |. 2 
+. 3 |1 5 |4 6 
+==Solution 91/100==
+No Solution Found.
+Time: 2.06775925085
+Assignments: 7
+Solution: No
+Timeout: No
+==Puzzle 92/100==
+5 4 |. 6 |3 . 
+2 3 |4 . |. 6 
+. 6 |3 5 |2 . 
+----+----+----
+. . |1 3 |4 . 
+. 1 |6 . |5 . 
+3 5 |. . |1 . 
+==Solution 92/100==
+No Solution Found.
+Time: 1.23824592572
+Assignments: 4
+Solution: No
+Timeout: No
+==Puzzle 93/100==
+3 . |. . |2 . 
+1 . |2 . |5 6 
+. 2 |3 6 |1 . 
+----+----+----
+5 6 |. 3 |. 4 
+2 3 |4 5 |6 . 
+4 . |. 2 |. . 
+==Solution 93/100==
+No Solution Found.
+Time: 1.4816180269
+Assignments: 3
+Solution: No
+Timeout: No
+==Puzzle 94/100==
+. 3 |. . |. 6 
+6 2 |5 4 |3 1 
+. . |6 . |. . 
+----+----+----
+5 . |1 6 |4 . 
+3 6 |2 5 |. . 
+. 1 |3 . |2 5 
+==Solution 94/100==
+No Solution Found.
+Time: 4.23822875712
+Assignments: 20
+Solution: No
+Timeout: No
+==Puzzle 95/100==
+6 2 |. . |3 4 
+5 1 |4 . |. 2 
+3 4 |. 2 |1 . 
+----+----+----
+4 . |. . |6 . 
+1 . |2 . |4 5 
+2 . |6 1 |. . 
+==Solution 95/100==
+No Solution Found.
+Time: 1.60962934251
+Assignments: 6
+Solution: No
+Timeout: No
+==Puzzle 96/100==
+. 4 |. . |. . 
+1 . |5 3 |6 . 
+5 . |4 6 |2 . 
+----+----+----
+4 5 |1 . |. 2 
+6 3 |2 . |4 1 
+. 2 |6 . |5 . 
+==Solution 96/100==
+No Solution Found.
+Time: 2.05300029916
+Assignments: 9
+Solution: No
+Timeout: No
+==Puzzle 97/100==
+3 2 |. . |. 5 
+. . |6 . |3 4 
+5 6 |. . |2 . 
+----+----+----
+6 . |1 . |4 3 
+. 1 |4 6 |5 . 
+. 4 |3 5 |. 2 
+==Solution 97/100==
+No Solution Found.
+Time: 2.54757578205
+Assignments: 10
+Solution: No
+Timeout: No
+==Puzzle 98/100==
+4 . |. 3 |2 5 
+2 5 |6 1 |. 4 
+3 . |4 . |. 6 
+----+----+----
+1 3 |5 . |. . 
+. 2 |1 4 |6 . 
+5 . |. . |3 . 
+==Solution 98/100==
+No Solution Found.
+Time: 1.33252249452
+Assignments: 4
+Solution: No
+Timeout: No
+==Puzzle 99/100==
+1 2 |. 4 |5 . 
+5 3 |. . |4 2 
+. 4 |. . |1 6 
+----+----+----
+6 . |. 3 |. 5 
+. 5 |4 . |. 1 
+2 . |. 1 |6 3 
+==Solution 99/100==
+No Solution Found.
+Time: 3.39094444939
+Assignments: 17
+Solution: No
+Timeout: No
+==Puzzle 100/100==
+5 . |. 2 |6 3 
+3 . |4 1 |5 . 
+. 6 |5 . |2 1 
+----+----+----
+4 . |1 . |. 2 
+. . |. 4 |3 . 
+. 2 |3 6 |. 5 
+==Solution 100/100==
+No Solution Found.
+Time: 2.57829849772
+Assignments: 10
+Solution: No
+Timeout: No
